@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-        <color name="primaryColor">#2432c1</color>
-        <color name="primaryLightColor">#685df5</color>
-        <color name="primaryDarkColor">#000a8f</color>
-        <color name="secondaryColor">#020087</color>
-        <color name="secondaryLightColor">#4f2fb8</color>
-        <color name="secondaryDarkColor">#000059</color>
-        <color name="primaryTextColor">#ffffff</color>
-        <color name="secondaryTextColor">#ffffff</color>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorPrimaryVariant">@color/primaryLightColor</item>
+        <item name="colorOnPrimary">@color/primaryTextColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/secondaryTextColor</item>
     </style>
 </resources>
