@@ -1,6 +1,6 @@
 package characters
 
-class Character {
-
-    //TODO add relevent character information/icon
+class Character (var id : Int){
+    lateinit var name : String
+    lateinit var icon : String //TODO figure out what datatype icon is
 }

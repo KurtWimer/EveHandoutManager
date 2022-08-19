@@ -6,11 +6,12 @@
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/character_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/characterIcon"
+            android:id="@+id/character_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -22,12 +23,12 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
-            android:id="@+id/characterName"
+            android:id="@+id/character_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/characterIcon"
-            app:layout_constraintStart_toEndOf="@+id/characterIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/character_icon"
+            app:layout_constraintStart_toEndOf="@+id/character_icon"
             tools:text="Fredrick Vonhole" />
 
         <Button
@@ -37,8 +38,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:text="Logout"
-            app:layout_constraintBaseline_toBaselineOf="@+id/characterName"
+            app:layout_constraintBaseline_toBaselineOf="@+id/character_name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/characterName" />
+            app:layout_constraintStart_toEndOf="@+id/character_name" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
