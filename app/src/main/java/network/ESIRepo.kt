@@ -9,6 +9,7 @@ import kotlin.random.Random
 
 const val SCOPES = "esi-wallet.read_character_wallet.v1 esi-contracts.read_character_contracts.v1"
 class ESIRepo {
+    //variables used for communication with server
     private val state = "test"
     private lateinit var verifier: String
     private lateinit var challenge : String
@@ -47,4 +48,9 @@ class ESIRepo {
         }
         challenge = String(Base64.getUrlEncoder().encode(hash(verifier)))
     }
+
+    fun handleCallback(code: String, state: String){
+
+    }
+
 }
