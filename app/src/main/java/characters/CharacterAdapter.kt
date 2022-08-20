@@ -6,13 +6,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.evehandoutmanager.R
 
-class CharacterAdapater : RecyclerView.Adapter<CharacterAdapater.ViewHolder>(){
+class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.ViewHolder>(){
 
-    private var characters : List<Character> = listOf<Character>(Character(1)) //TODO USE ESI Call to edit list
+    private var characters : List<Character> = listOf<Character>(Character(1 , "TODO")) //TODO USE ESI Call to edit list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_character, parent, false)

@@ -8,23 +8,24 @@ import java.util.*
 import kotlin.random.Random
 
 const val SCOPES = "esi-wallet.read_character_wallet.v1 esi-contracts.read_character_contracts.v1"
+const val BASEURL = "login.eveonline.com/v2/oauth"
 class ESIRepo {
     //variables used for communication with server
     private val state = "test"
     private lateinit var verifier: String
     private lateinit var challenge : String
-
+    private val clientID = R.string.client_id.toString()
     init {
         generateChallenge()
     }
     fun getLoginIntent(): Intent {
         //create URI to pass to intent
         val builder = Uri.Builder()
-        builder.scheme("http")
-            .authority("https://login.eveonline.com/v2/oauth/authorize/")
+        builder.scheme("https")
+            .authority("$BASEURL/authorize/")
             .appendQueryParameter("response_type", "code")
             .appendQueryParameter("redirect_uri", R.string.redirect_uri.toString())
-            .appendQueryParameter("client_id", R.string.client_id.toString())
+            .appendQueryParameter("client_id", clientID)
             .appendQueryParameter("scope", SCOPES)
             .appendQueryParameter("code_challenge", challenge)
             .appendQueryParameter("code_challenge_method", "S256")
@@ -50,7 +51,7 @@ class ESIRepo {
     }
 
     fun handleCallback(code: String, state: String){
-
+        //TODO call retrofit callback
     }
 
 }

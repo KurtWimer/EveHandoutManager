@@ -12,9 +12,9 @@ import com.example.evehandoutmanager.databinding.FragmentCharactersBinding
 
 class CharactersFragment : Fragment() {
     private var layoutManager : RecyclerView.LayoutManager? = null
-    private var adapter : RecyclerView.Adapter<CharacterAdapater.ViewHolder>? = null
+    private var adapter : RecyclerView.Adapter<CharacterAdapter.ViewHolder>? = null
     lateinit var viewModel : CharactersViewModel //TODO dagger? factoryies viewModel instantialtion
-    lateinit var adapater: CharacterAdapater //TODO dagger instantiation
+    lateinit var adapater: CharacterAdapter //TODO dagger instantiation
 
     override fun onCreateView(
         inflater: LayoutInflater,
