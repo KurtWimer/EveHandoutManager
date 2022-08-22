@@ -1,12 +1,13 @@
 package characters
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 
-class CharactersViewModel (private val application: Application){
+class CharactersViewModel (private val app: Application) : AndroidViewModel(app){
+    private val _navigateToSSO = MutableLiveData<Boolean>(false)
+    val navigateToSSO : LiveData<Boolean>
+        get() = _navigateToSSO
+
     //private val dataSource TODO
 
     //currently logged in Characters
@@ -14,6 +15,11 @@ class CharactersViewModel (private val application: Application){
     val characterList: LiveData<List<Character>>
         get() = _characterList
 
+
+    fun onLoginButton(){ _navigateToSSO.value = true }
+
+    //called after navigating
+    fun onLoginButtonComplete(){ _navigateToSSO.value = false }
 }
 
 

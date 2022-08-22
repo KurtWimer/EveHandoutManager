@@ -9,22 +9,23 @@ import kotlin.random.Random
 
 const val SCOPES = "esi-wallet.read_character_wallet.v1 esi-contracts.read_character_contracts.v1"
 const val BASEURL = "login.eveonline.com/v2/oauth"
+
+//TODO can this be refactored into only support methods?
 class ESIRepo {
     //variables used for communication with server
     private val state = "test"
     private lateinit var verifier: String
     private lateinit var challenge : String
-    private val clientID = R.string.client_id.toString()
     init {
         generateChallenge()
     }
-    fun getLoginIntent(): Intent {
+    fun getLoginIntent(clientID: String, redirect_uri: String): Intent {
         //create URI to pass to intent
         val builder = Uri.Builder()
         builder.scheme("https")
-            .authority("$BASEURL/authorize/")
+            .encodedAuthority("$BASEURL/authorize/")
             .appendQueryParameter("response_type", "code")
-            .appendQueryParameter("redirect_uri", R.string.redirect_uri.toString())
+            .appendQueryParameter("redirect_uri", redirect_uri)
             .appendQueryParameter("client_id", clientID)
             .appendQueryParameter("scope", SCOPES)
             .appendQueryParameter("code_challenge", challenge)

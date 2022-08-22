@@ -3,4 +3,6 @@
     <string name="characters">Characters</string>
     <string name="client_id">ec494c14c0a54eb49866c0b49cf4958b</string>
     <string name="redirect_uri">http://localhost:3000/callback</string>
+    <string name="help_button_description">Press to receive help</string>
+    <string name="login_button_description">Press to login your Eve character</string>
 </resources>

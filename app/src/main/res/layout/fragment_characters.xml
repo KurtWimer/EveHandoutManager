@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:name="androidx.navigation.fragment.NavHostFragment">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="characters.CharactersViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,7 +21,8 @@
             android:layout_marginTop="@dimen/padding_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_help" />
+            app:srcCompat="@android:drawable/ic_menu_help"
+            android:contentDescription="@string/help_button_description" />
 
         <TextView
             android:id="@+id/characters_title"
@@ -53,6 +55,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/eve_sso_login_black_large" />
+            app:srcCompat="@drawable/eve_sso_login_black_large"
+            android:onClick="@{() -> viewModel.onLoginButton()}"
+            android:contentDescription="@string/login_button_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
