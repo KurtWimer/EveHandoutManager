@@ -31,6 +31,7 @@ class ESIRepo {
             .appendQueryParameter("code_challenge", challenge)
             .appendQueryParameter("code_challenge_method", "S256")
             .appendQueryParameter("state", state)
+
         return Intent(Intent.ACTION_VIEW, builder.build())
     }
 
