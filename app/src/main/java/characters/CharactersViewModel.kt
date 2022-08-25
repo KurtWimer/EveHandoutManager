@@ -1,15 +1,20 @@
 package characters
 
 import android.app.Application
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.preference.PreferenceManager
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.evehandoutmanager.R
 import kotlinx.coroutines.launch
 import network.ESIRepo
+import java.util.prefs.Preferences
 
 class CharactersViewModel (private val app: Application, private val state : SavedStateHandle)
         : AndroidViewModel(app){
+    private val sharedPreferences = app.getSharedPreferences("EHMPreferences", MODE_PRIVATE)
+
     private val _navigateToSSO = MutableLiveData<Intent?>(null)
     val navigateToSSO : LiveData<Intent?>
         get() = _navigateToSSO
@@ -25,7 +30,10 @@ class CharactersViewModel (private val app: Application, private val state : Sav
     //sets flag to trigger navigation
     fun onLoginButton(){
         val (challenge, verifier) = ESIRepo.generateChallenge()
-        state["verifier"] = verifier
+        sharedPreferences.edit().apply {
+            putString("verifier", verifier)
+        }.commit()
+        requireNotNull(sharedPreferences.getString("verifier", null))
         val intent = ESIRepo.getLoginIntent(
             app.getString(R.string.client_id),
             app.getString(R.string.redirect_uri),
@@ -40,7 +48,7 @@ class CharactersViewModel (private val app: Application, private val state : Sav
     fun handleCallback(code: String) {
         viewModelScope.launch {
             val clientID = app.getString(R.string.client_id)
-            val token = ESIRepo.handleCallback(clientID, code, requireNotNull(state.get<String>("verifier")))
+            val token = ESIRepo.handleCallback(clientID, code, requireNotNull(sharedPreferences.getString("verifier", null)))
             Log.i("CharacterViewModel", token.toString())
         }
     }
