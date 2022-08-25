@@ -2,10 +2,13 @@ package network
 
 import android.content.Intent
 import android.net.Uri
-import com.example.evehandoutmanager.R
+import android.util.Log
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.security.MessageDigest
 import java.util.*
 import kotlin.random.Random
+import retrofit2.await
 
 const val SCOPES = "esi-wallet.read_character_wallet.v1 esi-contracts.read_character_contracts.v1"
 const val BASEURL = "login.eveonline.com/v2/oauth"
@@ -13,13 +16,12 @@ const val BASEURL = "login.eveonline.com/v2/oauth"
 //TODO can this be refactored into only support methods?
 class ESIRepo {
     //variables used for communication with server
-    private val state = "test"
     private lateinit var verifier: String
     private lateinit var challenge : String
     init {
         generateChallenge()
     }
-    fun getLoginIntent(clientID: String, redirect_uri: String): Intent {
+    fun getLoginIntent(clientID: String, redirect_uri: String, state: String): Intent {
         //create URI to pass to intent
         val builder = Uri.Builder()
         builder.scheme("https")
@@ -52,8 +54,16 @@ class ESIRepo {
         challenge = String(Base64.getUrlEncoder().encode(hash(verifier)))
     }
 
-    fun handleCallback(code: String, state: String){
-        //TODO call retrofit callback
+    suspend fun handleCallback(clientID: String, code: String) {
+        withContext(Dispatchers.IO) {
+            Log.i("ESIRepo", verifier)
+            val token = Network.esi.handleLoginCallback(
+                clientID = clientID,
+                code = code,
+                verifier = verifier
+            ).await()
+            return@withContext token
+        }
     }
 
 }

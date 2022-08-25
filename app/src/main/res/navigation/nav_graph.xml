@@ -11,9 +11,13 @@
         android:label="CharactersFragment" >
         <argument
             android:name="code"
-            app:argType="string" />
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"/>
         <argument
             android:name="state"
-            app:argType="string"/>
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true"/>
     </fragment>
 </navigation>

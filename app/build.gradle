@@ -71,4 +71,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     //JWT tokens
     implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
+    //Retrofit logging
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 }

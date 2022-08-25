@@ -6,4 +6,5 @@
     <string name="help_button_description">Press to receive help</string>
     <string name="login_button_description">Press to login your Eve character</string>
     <string name="domain">evehandoutmanager.app</string>
+    <string name="state">test</string>
 </resources>
