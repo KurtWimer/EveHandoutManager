@@ -8,9 +8,8 @@ import com.example.evehandoutmanager.R
 import kotlinx.coroutines.launch
 import network.ESIRepo
 
-class CharactersViewModel (
-    private val app: Application) : AndroidViewModel(app){
-    private val repo = ESIRepo() //TODO dagger
+class CharactersViewModel (private val app: Application, private val state : SavedStateHandle)
+        : AndroidViewModel(app){
     private val _navigateToSSO = MutableLiveData<Intent?>(null)
     val navigateToSSO : LiveData<Intent?>
         get() = _navigateToSSO
@@ -25,10 +24,13 @@ class CharactersViewModel (
 
     //sets flag to trigger navigation
     fun onLoginButton(){
-        val intent = repo.getLoginIntent(
+        val (challenge, verifier) = ESIRepo.generateChallenge()
+        state["verifier"] = verifier
+        val intent = ESIRepo.getLoginIntent(
             app.getString(R.string.client_id),
             app.getString(R.string.redirect_uri),
-            app.getString(R.string.state)
+            app.getString(R.string.state),
+            challenge
         )
         _navigateToSSO.value = intent
     }
@@ -38,23 +40,8 @@ class CharactersViewModel (
     fun handleCallback(code: String) {
         viewModelScope.launch {
             val clientID = app.getString(R.string.client_id)
-            val token = repo.handleCallback(clientID, code)
+            val token = ESIRepo.handleCallback(clientID, code, requireNotNull(state.get<String>("verifier")))
             Log.i("CharacterViewModel", token.toString())
         }
-    }
-}
-
-
-//Simple Factory for Character ViewModel
-class CharactersViewModelFactory(
-    //private val dataSource: SleepDatabaseDao, TODO
-    private val application: Application
-) : ViewModelProvider.Factory {
-    @Suppress("unchecked_cast")
-    override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(CharactersViewModel::class.java)) {
-            return CharactersViewModel(application) as T
-        }
-        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

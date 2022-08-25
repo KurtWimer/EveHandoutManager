@@ -10,10 +10,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
 
-    override fun onStart() {
-        super.onStart()
         if (intent.data != null) {
             //extracts callback arguments to pass to character fragment
             val uri = Uri.parse(intent.data.toString())

@@ -14,14 +14,8 @@ const val SCOPES = "esi-wallet.read_character_wallet.v1 esi-contracts.read_chara
 const val BASEURL = "login.eveonline.com/v2/oauth"
 
 //TODO can this be refactored into only support methods?
-class ESIRepo {
-    //variables used for communication with server
-    private lateinit var verifier: String
-    private lateinit var challenge : String
-    init {
-        generateChallenge()
-    }
-    fun getLoginIntent(clientID: String, redirect_uri: String, state: String): Intent {
+object ESIRepo {
+    fun getLoginIntent(clientID: String, redirect_uri: String, state: String, challenge: String): Intent {
         //create URI to pass to intent
         val builder = Uri.Builder()
         builder.scheme("https")
@@ -37,12 +31,13 @@ class ESIRepo {
         return Intent(Intent.ACTION_VIEW, builder.build())
     }
 
-    private fun generateChallenge(){
+    //Creates a pair of challance/verifier strings for login verification
+    fun generateChallenge() : Pair<String, String>{
         //generate 32 bytes
         //base 64url encode them
         val random = Random(15)//TODO use a variable seed
         val byteArray = random.nextBytes(32)
-        verifier = String(Base64.getUrlEncoder().encode(byteArray))
+        val verifier = String(Base64.getUrlEncoder().encode(byteArray))
 
         //sha-256 verifier
         //64url encode hash output
@@ -51,10 +46,12 @@ class ESIRepo {
             val md = MessageDigest.getInstance("SHA-256")
             return md.digest(bytes)
         }
-        challenge = String(Base64.getUrlEncoder().encode(hash(verifier)))
+        val challenge = String(Base64.getUrlEncoder().encode(hash(verifier)))
+        Log.i("ESIRepo", "challange: $challenge verifier: $verifier") //TODO remove as this log is a security vulnerability
+        return Pair(challenge, verifier)
     }
 
-    suspend fun handleCallback(clientID: String, code: String) {
+    suspend fun handleCallback(clientID: String, code: String, verifier: String) {
         withContext(Dispatchers.IO) {
             Log.i("ESIRepo", verifier)
             val token = Network.esi.handleLoginCallback(

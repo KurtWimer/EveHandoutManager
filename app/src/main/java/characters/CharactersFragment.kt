@@ -8,18 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.example.evehandoutmanager.R
 import com.example.evehandoutmanager.databinding.FragmentCharactersBinding
-import network.ESIRepo
 
 class CharactersFragment : Fragment() {
     private var layoutManager : RecyclerView.LayoutManager? = null
     private var adapter : RecyclerView.Adapter<CharacterAdapter.ViewHolder>? = null //TODO dagger instantiation]
     private var _binding : FragmentCharactersBinding? = null
     private val binding get() = _binding!!
+    private val characterViewModel : CharactersViewModel by activityViewModels()
     //lateinit var viewModel : CharactersViewModel //TODO dagger? factoryies viewModel instantialtion
     private val args : CharactersFragmentArgs by navArgs()
 
@@ -31,7 +31,6 @@ class CharactersFragment : Fragment() {
     ): View {
         _binding  = DataBindingUtil.inflate(
             inflater, R.layout.fragment_characters, container, false)
-        val characterViewModel = ViewModelProvider(this)[CharactersViewModel::class.java]
         //bind xml data to viewModel
         binding.viewModel = characterViewModel
         binding.characterList.adapter = adapter
