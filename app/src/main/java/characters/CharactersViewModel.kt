@@ -48,8 +48,13 @@ class CharactersViewModel (private val app: Application, private val state : Sav
             val clientID = app.getString(R.string.client_id)
             //get a token from ESI
             val token = ESIRepo.handleCallback(clientID, code, requireNotNull(sharedPreferences.getString("verifier", null)))
-            Log.i("CharacterViewModel", "received authorization token")
-            //TODO create new character w/ token
+            if (token.validate()){
+                Log.i("CharacterViewModel", "received authorization token")
+                //TODO create new character w/ token
+            }else{
+                Log.w("CharacterViewModel", "Invalid Token Received: ${token.toString()}")
+            }
+
         }
     }
 }
