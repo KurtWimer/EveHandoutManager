@@ -7,6 +7,7 @@ buildscript {
         room_version = "2.4.3"
         version_navigation = "2.5.1"
         hilt_version = "2.38.1"
+        retrofit_version = "2.9.0"
     }
     dependencies {
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$version_navigation"

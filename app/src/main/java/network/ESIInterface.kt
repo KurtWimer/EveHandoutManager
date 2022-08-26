@@ -17,7 +17,7 @@ interface ESIInterface {
         "Host: login.eveonline.com"
     )
     @POST("token")
-    suspend fun handleLoginCallback(
+    fun handleLoginCallback(
         @Field("client_id") clientID: String,
         @Field("code") code: String,
         @Field("code_verifier") verifier: String,
@@ -27,7 +27,7 @@ interface ESIInterface {
 
 object Network {
     private val client =  OkHttpClient.Builder()
-        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+        //.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .build()
 

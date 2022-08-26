@@ -37,7 +37,7 @@ object ESIRepo {
         //base 64url encode them
         val random = Random(15)//TODO use a variable seed
         val byteArray = random.nextBytes(32)
-        val verifier = String(Base64.getUrlEncoder().encode(byteArray))
+        val verifier = String(Base64.getUrlEncoder().encode(byteArray)).replace("=", "")
 
         //sha-256 verifier
         //64url encode hash output
@@ -46,8 +46,7 @@ object ESIRepo {
             val md = MessageDigest.getInstance("SHA-256")
             return md.digest(bytes)
         }
-        val challenge = String(Base64.getUrlEncoder().encode(hash(verifier)))
-        Log.i("ESIRepo", "challange: $challenge verifier: $verifier") //TODO remove as this log is a security vulnerability
+        val challenge = String(Base64.getUrlEncoder().encode(hash(verifier))).replace("=", "")
         return Pair(challenge, verifier)
     }
 
