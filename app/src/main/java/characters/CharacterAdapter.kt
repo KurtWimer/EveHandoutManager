@@ -11,7 +11,7 @@ import com.example.evehandoutmanager.R
 
 class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.ViewHolder>(){
 
-    private var characters : List<Character> = listOf<Character>(Character(1 , "TODO")) //TODO USE ESI Call to edit list
+    private var characters : List<Account> = listOf<Account>(Account("" , "TODO")) //TODO USE ESI Call to edit list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_character, parent, false)

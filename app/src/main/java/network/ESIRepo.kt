@@ -11,7 +11,8 @@ import kotlin.random.Random
 import retrofit2.await
 
 const val SCOPES = "esi-wallet.read_character_wallet.v1 esi-contracts.read_character_contracts.v1"
-const val BASEURL = "login.eveonline.com/v2/oauth"
+const val SSO_BASEURL = "login.eveonline.com/v2/oauth"
+const val ESI_BASEURL = "esi.evetech.net/latest"
 
 //TODO can this be refactored into only support methods?
 object ESIRepo {
@@ -19,7 +20,7 @@ object ESIRepo {
         //create URI to pass to intent
         val builder = Uri.Builder()
         builder.scheme("https")
-            .encodedAuthority("$BASEURL/authorize/")
+            .encodedAuthority("$SSO_BASEURL/authorize/")
             .appendQueryParameter("response_type", "code")
             .appendQueryParameter("redirect_uri", redirect_uri)
             .appendQueryParameter("client_id", clientID)
@@ -53,7 +54,7 @@ object ESIRepo {
     suspend fun handleCallback(clientID: String, code: String, verifier: String) : Token {
         return withContext(Dispatchers.IO) {
             Log.i("ESIRepo", verifier)
-            val token : Token = Network.esi.handleLoginCallback(
+            val token : Token = Sso.retrofitInterface.handleLoginCallback(
                 clientID = clientID,
                 code = code,
                 verifier = verifier

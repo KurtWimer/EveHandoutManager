@@ -10,12 +10,9 @@ data class Token(
     @SerializedName("token_type"    ) var tokenType    : String,
     @SerializedName("refresh_token" ) var refreshToken : String
 ){
-
+    val charcterID : String
+        get() = requireNotNull(JWT(this.accessToken).subject).split(":").last()
     //private val jwt = JWT(this.accessToken)
-
-    fun getCharacterID() : String {
-        return requireNotNull(JWT(this.accessToken).subject).split(":").last()
-    }
 
     fun getExpiration(): Date {
         return requireNotNull(JWT(this.accessToken).expiresAt)

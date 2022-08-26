@@ -20,8 +20,8 @@ class CharactersViewModel (private val app: Application, private val state : Sav
     //private val dataSource TODO
 
     //currently logged in Characters
-    private val _characterList = MutableLiveData<List<Character>>()
-    val characterList: LiveData<List<Character>>
+    private val _characterList = MutableLiveData<MutableList<Account>>()
+    val characterList: LiveData<MutableList<Account>>
         get() = _characterList
 
 
@@ -50,6 +50,9 @@ class CharactersViewModel (private val app: Application, private val state : Sav
             val token = ESIRepo.handleCallback(clientID, code, requireNotNull(sharedPreferences.getString("verifier", null)))
             if (token.validate()){
                 Log.i("CharacterViewModel", "received authorization token")
+                val (name, iconUrl) = fetchInformation(token.charcterID)
+                val newChar = Account(name, iconUrl, token)
+                _characterList.value?.add(newChar)
                 //TODO create new character w/ token
             }else{
                 Log.w("CharacterViewModel", "Invalid Token Received: ${token.toString()}")

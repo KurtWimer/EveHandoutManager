@@ -11,5 +11,5 @@ data class CharacterResponse(
     @SerializedName("gender"          ) var gender         : String? = null,
     @SerializedName("name"            ) var name           : String? = null,
     @SerializedName("race_id"         ) var raceId         : Int?    = null,
-    @SerializedName("security_status" ) var securityStatus : Int?    = null
+    @SerializedName("security_status" ) var securityStatus : Double?    = null
 )
