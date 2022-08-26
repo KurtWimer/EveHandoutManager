@@ -1,6 +1,10 @@
 package characters
 
-class Character (val id : Int,val token : String){
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import network.Network
+
+class Character (private val character_id : String){
     lateinit var name : String
-    lateinit var icon : String //TODO figure out what datatype icon is
+    lateinit var iconUrl : String //TODO figure out what datatype icon is
 }
