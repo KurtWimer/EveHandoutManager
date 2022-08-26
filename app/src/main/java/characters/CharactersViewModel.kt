@@ -3,13 +3,11 @@ package characters
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.preference.PreferenceManager
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.evehandoutmanager.R
 import kotlinx.coroutines.launch
 import network.ESIRepo
-import java.util.prefs.Preferences
 
 class CharactersViewModel (private val app: Application, private val state : SavedStateHandle)
         : AndroidViewModel(app){
@@ -48,8 +46,10 @@ class CharactersViewModel (private val app: Application, private val state : Sav
     fun handleCallback(code: String) {
         viewModelScope.launch {
             val clientID = app.getString(R.string.client_id)
+            //get a token from ESI
             val token = ESIRepo.handleCallback(clientID, code, requireNotNull(sharedPreferences.getString("verifier", null)))
-            Log.i("CharacterViewModel", token.toString())
+            Log.i("CharacterViewModel", "received authorization token")
+            //TODO create new character w/ token
         }
     }
 }

@@ -50,10 +50,10 @@ object ESIRepo {
         return Pair(challenge, verifier)
     }
 
-    suspend fun handleCallback(clientID: String, code: String, verifier: String) {
-        withContext(Dispatchers.IO) {
+    suspend fun handleCallback(clientID: String, code: String, verifier: String) : Token {
+        return withContext(Dispatchers.IO) {
             Log.i("ESIRepo", verifier)
-            val token = Network.esi.handleLoginCallback(
+            val token : Token = Network.esi.handleLoginCallback(
                 clientID = clientID,
                 code = code,
                 verifier = verifier

@@ -70,7 +70,7 @@ dependencies {
     implementation "com.google.code.gson:gson:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     //JWT tokens
-    implementation 'io.github.nefilim.kjwt:kjwt-core:0.5.3'
+    implementation 'com.auth0.android:jwtdecode:2.0.1'
     //Retrofit logging
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 }
