@@ -12,16 +12,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import com.example.evehandoutmanager.R
-import com.example.evehandoutmanager.databinding.FragmentCharactersBinding
+import com.example.evehandoutmanager.databinding.FragmentAccountBinding
 
 class AccountFragment : Fragment() {
     private var layoutManager : RecyclerView.LayoutManager? = null
     private var adapter : RecyclerView.Adapter<AccountAdapter.ViewHolder>? = null //TODO dagger instantiation]
-    private var _binding : FragmentCharactersBinding? = null
+    private var _binding : FragmentAccountBinding? = null
     private val binding get() = _binding!!
     private val characterViewModel : AccountViewModel by activityViewModels()
     //lateinit var viewModel : CharactersViewModel //TODO dagger? factoryies viewModel instantialtion
-    private val args : CharactersFragmentArgs by navArgs()
+    private val args : AccountFragmentArgs by navArgs()
 
 
     override fun onCreateView(
