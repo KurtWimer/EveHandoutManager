@@ -20,9 +20,9 @@ class AccountViewModel (private val app: Application, private val state : SavedS
     //private val dataSource TODO
 
     //currently logged in Characters
-    private val _characterList = MutableLiveData<MutableList<Account>>()
-    val characterList: LiveData<MutableList<Account>>
-        get() = _characterList
+    private val _accountList = MutableLiveData<MutableList<Account>>()
+    val accountList: LiveData<MutableList<Account>>
+        get() = _accountList
 
 
     //sets flag to trigger navigation
@@ -52,7 +52,7 @@ class AccountViewModel (private val app: Application, private val state : SavedS
                 Log.i("CharacterViewModel", "received authorization token")
                 val (name, iconUrl) = fetchInformation(token.charcterID)
                 val newChar = Account(name, iconUrl, token)
-                _characterList.value?.add(newChar)
+                _accountList.value?.add(newChar)
                 //TODO create new character w/ token
             }else{
                 Log.w("CharacterViewModel", "Invalid Token Received: ${token.toString()}")

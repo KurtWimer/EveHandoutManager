@@ -6,7 +6,7 @@ import network.Esi
 import network.Token
 import retrofit2.await
 
-class Account (
+data class Account (
     val name : String,
     private val iconURL: String,
     val token: Token? = null){}

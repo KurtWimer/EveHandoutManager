@@ -1,43 +1,51 @@
 package accounts
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.evehandoutmanager.R
+import com.example.evehandoutmanager.databinding.ListItemAccountBinding
 
-class AccountAdapter : RecyclerView.Adapter<AccountAdapter.ViewHolder>(){
-
-    private var characters : List<Account> = listOf<Account>(Account("" , "TODO")) //TODO USE ESI Call to edit list
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_account, parent, false)
-        return ViewHolder(view)
+class AccountAdapter :ListAdapter<Account,AccountAdapter.AccountViewHolder>(AccountDiffCallback()){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
+        return AccountViewHolder.from(parent)
     }
 
-    override fun getItemCount(): Int {
-        return characters.size
+    override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        //holder.characterIcon.setImageResource(holder.characterIcon) TODO apply character icon
-        holder.characterName.text = characters[position].name
+    class AccountViewHolder private constructor(val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
+//        var characterIcon : ImageView = itemView.findViewById(R.id.character_icon)
+//        var characterName : TextView = itemView.findViewById(R.id.character_name)
+//        var logoutButton : Button = itemView.findViewById(R.id.logout_button)
 
-    }
+        fun bind(item : Account){
+            binding.account = item
+            //TODO apply character icon
+        }
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var characterIcon : ImageView
-        var characterName : TextView
-        var logoutButton : Button
-
-        init {
-            characterIcon = itemView.findViewById(R.id.character_icon)
-            characterName = itemView.findViewById(R.id.character_name)
-            logoutButton = itemView.findViewById(R.id.logout_button)
+        companion object {
+            fun from(parent: ViewGroup) : AccountViewHolder {
+                val inflater = LayoutInflater.from(parent.context)
+                val binding = ListItemAccountBinding.inflate(inflater, parent, false)
+                return AccountViewHolder(binding)
+            }
         }
     }
 
 }
+
+class AccountDiffCallback : DiffUtil.ItemCallback<Account>() {
+    override fun areItemsTheSame(oldItem: Account, newItem: Account): Boolean {
+        return  oldItem.name == newItem.name
+    }
+
+    override fun areContentsTheSame(oldItem: Account, newItem: Account): Boolean {
+        return oldItem == newItem
+    }
+
+}
+
+class LogoutListener(val clickListener: () -> Unit)

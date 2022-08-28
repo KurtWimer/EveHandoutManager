@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <variable
+            name="account"
+            type="accounts.Account" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/character_list_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/character_icon"
@@ -27,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:text="@{account.name}"
             app:layout_constraintBottom_toBottomOf="@+id/character_icon"
             app:layout_constraintStart_toEndOf="@+id/character_icon"
             tools:text="Fredrick Vonhole" />
