@@ -12,12 +12,12 @@ import retrofit2.http.Query
 
 interface ESIInterface {
     @Headers("accept: application/json", "Cache-Control: no-cache")
-    @GET("characters/{id}/")
+    @GET("accounts/{id}/")
     fun getCharacter(
         @Path("id") characterID : String,
         @Query("datasource") datasource: String = DATASOURCE) : Call<CharacterResponse>
 
-    @GET("characters/{id}/portrait/")
+    @GET("accounts/{id}/portrait/")
     fun getPortrait(
         @Path("id") characterID : String,
         @Query("datasource") datasource: String = DATASOURCE) : Call<Portrait>

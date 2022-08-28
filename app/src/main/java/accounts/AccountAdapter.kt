@@ -1,4 +1,4 @@
-package characters
+package accounts
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +9,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.evehandoutmanager.R
 
-class CharacterAdapter : RecyclerView.Adapter<CharacterAdapter.ViewHolder>(){
+class AccountAdapter : RecyclerView.Adapter<AccountAdapter.ViewHolder>(){
 
     private var characters : List<Account> = listOf<Account>(Account("" , "TODO")) //TODO USE ESI Call to edit list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_character, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item_account, parent, false)
         return ViewHolder(view)
     }
 

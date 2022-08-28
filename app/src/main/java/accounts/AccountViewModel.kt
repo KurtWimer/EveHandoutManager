@@ -1,4 +1,4 @@
-package characters
+package accounts
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
@@ -9,7 +9,7 @@ import com.example.evehandoutmanager.R
 import kotlinx.coroutines.launch
 import network.ESIRepo
 
-class CharactersViewModel (private val app: Application, private val state : SavedStateHandle)
+class AccountViewModel (private val app: Application, private val state : SavedStateHandle)
         : AndroidViewModel(app){
     private val sharedPreferences = app.getSharedPreferences("EHMPreferences", MODE_PRIVATE)
 

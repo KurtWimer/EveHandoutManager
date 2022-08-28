@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/charactersFragment2"
-        android:name="characters.CharactersFragment"
+        android:name="accounts.AccountFragment"
         android:label="CharactersFragment" >
         <argument
             android:name="code"

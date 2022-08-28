@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="characters.CharactersViewModel" />
+            type="accounts.AccountViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

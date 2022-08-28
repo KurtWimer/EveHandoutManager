@@ -1,4 +1,4 @@
-package characters
+package accounts
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,4 +1,4 @@
-package characters
+package accounts
 
 import android.content.ActivityNotFoundException
 import android.os.Bundle
@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.evehandoutmanager.R
 import com.example.evehandoutmanager.databinding.FragmentCharactersBinding
 
-class CharactersFragment : Fragment() {
+class AccountFragment : Fragment() {
     private var layoutManager : RecyclerView.LayoutManager? = null
-    private var adapter : RecyclerView.Adapter<CharacterAdapter.ViewHolder>? = null //TODO dagger instantiation]
+    private var adapter : RecyclerView.Adapter<AccountAdapter.ViewHolder>? = null //TODO dagger instantiation]
     private var _binding : FragmentCharactersBinding? = null
     private val binding get() = _binding!!
-    private val characterViewModel : CharactersViewModel by activityViewModels()
+    private val characterViewModel : AccountViewModel by activityViewModels()
     //lateinit var viewModel : CharactersViewModel //TODO dagger? factoryies viewModel instantialtion
     private val args : CharactersFragmentArgs by navArgs()
 
@@ -30,7 +30,7 @@ class CharactersFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding  = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_characters, container, false)
+            inflater, R.layout.fragment_account, container, false)
         //bind xml data to viewModel
         binding.viewModel = characterViewModel
         binding.characterList.adapter = adapter
