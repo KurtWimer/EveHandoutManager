@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 .setPrimaryNavigationFragment(navFragment) // equivalent to app:defaultNavHost="true"
                 .commit()
             Log.i("MainActivity", intent.data.toString())
-        }else {
+        } else {
             val navFragment = NavHostFragment.create(R.navigation.nav_graph)
             supportFragmentManager.beginTransaction()
                 .replace(R.id.navFragment, navFragment)

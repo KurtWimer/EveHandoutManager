@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.example.evehandoutmanager.R
 import com.example.evehandoutmanager.databinding.FragmentAccountBinding
