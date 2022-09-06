@@ -6,6 +6,9 @@
         <variable
             name="account"
             type="com.example.evehandoutmanager.accounts.Account" />
+        <variable
+            name="logoutListener"
+            type="com.example.evehandoutmanager.accounts.AccountLogoutListener" />
 
     </data>
     <androidx.cardview.widget.CardView
@@ -57,7 +60,8 @@
                 android:text="@string/logout"
                 app:layout_constraintBaseline_toBaselineOf="@+id/character_name"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/character_name" />
+                app:layout_constraintStart_toEndOf="@+id/character_name"
+                android:onClick="@{() -> logoutListener.onClick(account)}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 

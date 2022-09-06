@@ -65,7 +65,11 @@ class AccountViewModel (private val app: Application, private val state : SavedS
         }
     }
 
-    fun logout(account: Account) {
-        database.accountDao.delete(account)
+    fun onLogoutButtonClicked(account: Account) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                database.accountDao.delete(account)
+            }
+        }
     }
 }

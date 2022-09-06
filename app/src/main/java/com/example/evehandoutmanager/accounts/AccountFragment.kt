@@ -16,7 +16,9 @@ import com.example.evehandoutmanager.databinding.FragmentAccountBinding
 import okhttp3.internal.toImmutableList
 
 class AccountFragment : Fragment() {
-    private var adapter = AccountAdapter() //TODO dagger instantiation]
+    private var adapter = AccountAdapter(AccountLogoutListener { account: Account ->
+        accountViewModel.onLogoutButtonClicked(account)
+    })
     private var _binding : FragmentAccountBinding? = null
     private val binding get() = _binding!!
     private val accountViewModel : AccountViewModel by activityViewModels()
@@ -34,12 +36,12 @@ class AccountFragment : Fragment() {
         binding.viewModel = accountViewModel
 
         //Set Up Live Data Observers
-        accountViewModel.accountList.observe(viewLifecycleOwner, Observer {
+        accountViewModel.accountList.observe(viewLifecycleOwner) {
             it?.let {
                 Log.d("AccountList", it.toString())
                 adapter.submitList(it.toImmutableList())
             }
-        })
+        }
         binding.accountList.adapter = adapter
 
         accountViewModel.navigateToSSO.observe(viewLifecycleOwner) { intent ->

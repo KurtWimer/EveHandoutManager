@@ -5,23 +5,22 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.evehandoutmanager.database.AccountDatabase
-import com.example.evehandoutmanager.database.getDatabase
 import com.example.evehandoutmanager.databinding.ListItemAccountBinding
 
-class AccountAdapter :ListAdapter<Account,AccountAdapter.AccountViewHolder>(AccountDiffCallback()){
+class AccountAdapter(private val logoutListener: AccountLogoutListener) :ListAdapter<Account,AccountAdapter.AccountViewHolder>(AccountDiffCallback()){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AccountViewHolder {
         return AccountViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: AccountViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), logoutListener)
     }
 
     class AccountViewHolder private constructor(private val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item : Account){
+        fun bind(item: Account, clickListener: AccountLogoutListener){
             binding.account = item
+            binding.logoutListener = clickListener
             //TODO apply character icon
         }
 
@@ -44,5 +43,8 @@ class AccountDiffCallback : DiffUtil.ItemCallback<Account>() {
     override fun areContentsTheSame(oldItem: Account, newItem: Account): Boolean {
         return oldItem == newItem
     }
+}
 
+class AccountLogoutListener(val clickListener: (Account) -> Unit){
+    fun onClick(account: Account) = clickListener(account)
 }
