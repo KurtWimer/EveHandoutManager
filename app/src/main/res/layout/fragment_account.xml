@@ -30,11 +30,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/padding_medium"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:contentDescription="@string/login_button_description"
+            android:onClick="@{() -> viewModel.onLoginButton()}"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/eve_sso_login_black_large"
-            android:onClick="@{() -> viewModel.onLoginButton()}"
-            android:contentDescription="@string/login_button_description" />
+            app:srcCompat="@drawable/eve_sso_login_black_large" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/bottom_navigation_menu" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

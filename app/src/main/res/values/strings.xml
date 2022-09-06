@@ -8,4 +8,7 @@
     <string name="domain">evehandoutmanager.app</string>
     <string name="state">test</string>
     <string name="logout">Logout</string>
+    <string name="account_page">Account Page</string>
+    <string name="home">Home</string>
+    <string name="settings">Settings</string>
 </resources>
