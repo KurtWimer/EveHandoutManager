@@ -9,10 +9,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.RecyclerView
 import com.example.evehandoutmanager.R
 import com.example.evehandoutmanager.databinding.FragmentAccountBinding
+import okhttp3.internal.toImmutableList
 
 class AccountFragment : Fragment() {
     private var adapter = AccountAdapter() //TODO dagger instantiation]
@@ -31,9 +32,16 @@ class AccountFragment : Fragment() {
             inflater, R.layout.fragment_account, container, false)
         //bind xml data to viewModel
         binding.viewModel = accountViewModel
-        binding.characterList.adapter = adapter
 
         //Set Up Live Data Observers
+        accountViewModel.accountList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                Log.d("AccountList", it.toString())
+                adapter.submitList(it.toImmutableList())
+            }
+        })
+        binding.accountList.adapter = adapter
+
         accountViewModel.navigateToSSO.observe(viewLifecycleOwner) { intent ->
             if (intent != null) {
                 Log.i("CharacterManager", "Attempting to open browser for eve SSO login")
