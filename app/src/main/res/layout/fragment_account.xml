@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="accounts.AccountViewModel" />
+            type="com.example.evehandoutmanager.accounts.AccountViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

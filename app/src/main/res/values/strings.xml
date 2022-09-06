@@ -7,4 +7,5 @@
     <string name="login_button_description">Press to login your Eve character</string>
     <string name="domain">evehandoutmanager.app</string>
     <string name="state">test</string>
+    <string name="logout">Logout</string>
 </resources>
