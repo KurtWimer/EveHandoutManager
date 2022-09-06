@@ -13,39 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/help_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@android:drawable/ic_menu_help"
-            android:contentDescription="@string/help_button_description" />
-
-        <TextView
-            android:id="@+id/characters_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_medium"
-            android:text="@string/characters"
-            app:layout_constraintBottom_toBottomOf="@+id/help_icon"
-            app:layout_constraintStart_toEndOf="@+id/help_icon" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/account_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
             android:layout_marginEnd="@dimen/padding_medium"
-            android:layout_marginBottom="@dimen/padding_medium"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toStartOf="@id/login_image"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/characters_title"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
             android:id="@+id/login_image"

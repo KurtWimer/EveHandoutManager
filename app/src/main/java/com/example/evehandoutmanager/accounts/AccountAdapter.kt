@@ -5,6 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.evehandoutmanager.database.AccountDatabase
+import com.example.evehandoutmanager.database.getDatabase
 import com.example.evehandoutmanager.databinding.ListItemAccountBinding
 
 class AccountAdapter :ListAdapter<Account,AccountAdapter.AccountViewHolder>(AccountDiffCallback()){
@@ -17,9 +19,6 @@ class AccountAdapter :ListAdapter<Account,AccountAdapter.AccountViewHolder>(Acco
     }
 
     class AccountViewHolder private constructor(private val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
-//        var characterIcon : ImageView = itemView.findViewById(R.id.character_icon)
-//        var characterName : TextView = itemView.findViewById(R.id.character_name)
-//        var logoutButton : Button = itemView.findViewById(R.id.logout_button)
 
         fun bind(item : Account){
             binding.account = item
@@ -47,5 +46,3 @@ class AccountDiffCallback : DiffUtil.ItemCallback<Account>() {
     }
 
 }
-
-class LogoutListener(val clickListener: () -> Unit)

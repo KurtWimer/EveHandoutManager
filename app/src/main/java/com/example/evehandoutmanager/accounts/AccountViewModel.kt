@@ -59,9 +59,13 @@ class AccountViewModel (private val app: Application, private val state : SavedS
                 }
                 //TODO create new character w/ token
             }else{
-                Log.w("CharacterViewModel", "Invalid Token Received: ${token.toString()}")
+                Log.w("CharacterViewModel", "Invalid Token Received: $token")
             }
 
         }
+    }
+
+    fun logout(account: Account) {
+        database.accountDao.delete(account)
     }
 }
