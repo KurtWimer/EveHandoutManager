@@ -1,4 +1,4 @@
-package network
+package com.example.evehandoutmanager.network
 
 import com.auth0.android.jwt.JWT
 import com.google.gson.annotations.SerializedName

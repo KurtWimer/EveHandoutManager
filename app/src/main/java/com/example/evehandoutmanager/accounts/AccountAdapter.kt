@@ -1,4 +1,4 @@
-package accounts
+package com.example.evehandoutmanager.accounts
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,7 +16,7 @@ class AccountAdapter :ListAdapter<Account,AccountAdapter.AccountViewHolder>(Acco
         holder.bind(getItem(position))
     }
 
-    class AccountViewHolder private constructor(val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
+    class AccountViewHolder private constructor(private val binding: ListItemAccountBinding) : RecyclerView.ViewHolder(binding.root) {
 //        var characterIcon : ImageView = itemView.findViewById(R.id.character_icon)
 //        var characterName : TextView = itemView.findViewById(R.id.character_name)
 //        var logoutButton : Button = itemView.findViewById(R.id.logout_button)

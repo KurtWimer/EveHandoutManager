@@ -1,4 +1,4 @@
-package network
+package com.example.evehandoutmanager.network
 
 
 import okhttp3.OkHttpClient

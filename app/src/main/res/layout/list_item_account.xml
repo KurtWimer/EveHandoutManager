@@ -5,7 +5,7 @@
     <data>
         <variable
             name="account"
-            type="accounts.Account" />
+            type="com.example.evehandoutmanager.accounts.Account" />
 
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,10 +20,12 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
+            app:imageUrl="@{account.iconURL}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            tools:srcCompat="@tools:sample/avatars"
+            android:contentDescription="Eve Character Icon" />
 
         <TextView
             android:id="@+id/character_name"
@@ -41,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Logout"
+            android:text="@string/logout"
             app:layout_constraintBaseline_toBaselineOf="@+id/character_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/character_name" />

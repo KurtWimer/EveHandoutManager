@@ -1,6 +1,6 @@
-package database
+package com.example.evehandoutmanager.database
 
-import accounts.Account
+import com.example.evehandoutmanager.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -25,7 +25,7 @@ abstract class AccountDatabase : RoomDatabase() {
 private lateinit var INSTANCE: AccountDatabase
 
 fun getDatabase(context: Context): AccountDatabase {
-        kotlin.synchronized(AccountDatabase::class.java) {
+        synchronized(AccountDatabase::class.java) {
     if (!::INSTANCE.isInitialized) {
         INSTANCE = Room.databaseBuilder(context.applicationContext,
             AccountDatabase::class.java,

@@ -1,4 +1,4 @@
-package network
+package com.example.evehandoutmanager.network
 
 import android.content.Intent
 import android.net.Uri

@@ -1,11 +1,10 @@
-package accounts
+package com.example.evehandoutmanager.accounts
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import network.Esi
-import network.Token
+import com.example.evehandoutmanager.network.Esi
 import retrofit2.await
 
 @Entity
@@ -16,7 +15,7 @@ data class Account constructor(
     val AccessToken: String,
     val RefreshToken: String)
 
-//Utility function allows all network calls to be done before creating a Character object
+//Utility function allows all com.example.evehandoutmanager.network calls to be done before creating a Character object
 suspend fun fetchInformation(characterID: String): Pair<String, String> {
     return withContext(Dispatchers.IO){
         val name  = Esi.retrofitInterface.getCharacter(characterID = characterID).await().name

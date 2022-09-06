@@ -1,4 +1,4 @@
-package accounts
+package com.example.evehandoutmanager.accounts
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
@@ -6,11 +6,11 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.evehandoutmanager.R
-import database.getDatabase
+import com.example.evehandoutmanager.database.getDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import network.ESIRepo
+import com.example.evehandoutmanager.network.ESIRepo
 
 class AccountViewModel (private val app: Application, private val state : SavedStateHandle)
         : AndroidViewModel(app){

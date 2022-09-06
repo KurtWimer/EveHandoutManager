@@ -1,4 +1,4 @@
-package accounts
+package com.example.evehandoutmanager.accounts
 
 import android.content.ActivityNotFoundException
 import android.os.Bundle

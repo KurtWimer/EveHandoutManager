@@ -1,4 +1,4 @@
-package network
+package com.example.evehandoutmanager.network
 
 import com.google.gson.annotations.SerializedName
 

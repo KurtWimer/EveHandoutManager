@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/charactersFragment2"
-        android:name="accounts.AccountFragment"
+        android:name="com.example.evehandoutmanager.accounts.AccountFragment"
         android:label="CharactersFragment" >
         <argument
             android:name="code"
