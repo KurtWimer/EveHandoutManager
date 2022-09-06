@@ -1,15 +1,20 @@
 package accounts
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import network.Esi
 import network.Token
 import retrofit2.await
 
-data class Account (
+@Entity
+data class Account constructor(
+    @PrimaryKey
     val name : String,
-    private val iconURL: String,
-    val token: Token? = null){}
+    val iconURL: String,
+    val AccessToken: String,
+    val RefreshToken: String)
 
 //Utility function allows all network calls to be done before creating a Character object
 suspend fun fetchInformation(characterID: String): Pair<String, String> {

@@ -6,7 +6,10 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.evehandoutmanager.R
+import database.getDatabase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import network.ESIRepo
 
 class AccountViewModel (private val app: Application, private val state : SavedStateHandle)
@@ -17,13 +20,12 @@ class AccountViewModel (private val app: Application, private val state : SavedS
     val navigateToSSO : LiveData<Intent?>
         get() = _navigateToSSO
 
-    //private val dataSource TODO
+    private val database = getDatabase(app)
 
     //currently logged in Characters
-    private val _accountList = MutableLiveData<MutableList<Account>>()
-    val accountList: LiveData<MutableList<Account>>
+    private val _accountList = database.accountDao.getAccounts()
+    val accountList: LiveData<List<Account>>
         get() = _accountList
-
 
     //sets flag to trigger navigation
     fun onLoginButton(){
@@ -51,8 +53,10 @@ class AccountViewModel (private val app: Application, private val state : SavedS
             if (token.validate()){
                 Log.i("CharacterViewModel", "received authorization token")
                 val (name, iconUrl) = fetchInformation(token.charcterID)
-                val newChar = Account(name, iconUrl, token)
-                _accountList.value?.add(newChar)
+                val newChar = Account(name, iconUrl, token.accessToken, token.refreshToken)
+                withContext(Dispatchers.IO){
+                    database.accountDao.insert(newChar)
+                }
                 //TODO create new character w/ token
             }else{
                 Log.w("CharacterViewModel", "Invalid Token Received: ${token.toString()}")
