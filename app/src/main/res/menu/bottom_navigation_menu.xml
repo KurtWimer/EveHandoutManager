@@ -7,7 +7,7 @@
         android:title="@string/account_page"/>
 
     <item
-        android:id="@+id/Home"
+        android:id="@+id/Handouts"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/home"/>

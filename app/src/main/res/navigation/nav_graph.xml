@@ -2,17 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/Handouts">
     <fragment
-        android:id="@+id/homeFragment"
+        android:id="@+id/Handouts"
         android:name="com.example.evehandoutmanager.home.HomeFragment"
         android:label="HomeFragment" >
         <action
-            android:id="@+id/action_homeFragment_to_accountFragment3"
-            app:destination="@id/accountFragment" />
+            android:id="@+id/action_homeFragment_to_accountFragment"
+            app:destination="@id/Accounts"
+            app:popUpTo="@id/nav_graph" />
     </fragment>
     <fragment
-        android:id="@+id/accountFragment"
+        android:id="@+id/Accounts"
         android:name="com.example.evehandoutmanager.accounts.AccountFragment"
         android:label="AccountFragment">
         <argument
@@ -26,5 +27,5 @@
             app:argType="string"
             app:nullable="true"/>
     </fragment>
-    <fragment android:id="@+id/placeholder2" />
+    <fragment android:id="@+id/Settings" />
 </navigation>

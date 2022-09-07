@@ -62,8 +62,7 @@ class AccountFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        if (args.code != null) {
+        if (args.code != null && args.state != null) {
             binding.viewModel?.handleCallback(requireNotNull(args.code))
         }
     }
