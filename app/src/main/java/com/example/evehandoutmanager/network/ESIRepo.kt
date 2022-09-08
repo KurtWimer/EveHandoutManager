@@ -14,7 +14,6 @@ const val SCOPES = "esi-wallet.read_character_wallet.v1 esi-contracts.read_chara
 const val SSO_BASEURL = "login.eveonline.com/v2/oauth"
 const val ESI_BASEURL = "esi.evetech.net/latest"
 
-//TODO can this be refactored into only support methods?
 object ESIRepo {
     fun getLoginIntent(clientID: String, redirect_uri: String, state: String, challenge: String): Intent {
         //create URI to pass to intent

@@ -2,8 +2,11 @@ package com.example.evehandoutmanager.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
+import com.example.evehandoutmanager.database.getDatabase
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
-    lateinit var _Handouts : MutableLiveData<List<Handout>>
+    private val database = getDatabase(app)
+    val _Handouts = database.handoutDao.getHandouts()
+
+
 }

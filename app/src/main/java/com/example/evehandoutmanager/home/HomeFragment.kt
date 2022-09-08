@@ -11,7 +11,7 @@ import com.example.evehandoutmanager.R
 import com.example.evehandoutmanager.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
-    var _binding : FragmentHomeBinding? = null
+    private var _binding : FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel : HomeViewModel by activityViewModels()
 
@@ -21,6 +21,8 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
+        binding.viewModel = homeViewModel
+
         return binding.root
     }
 }
