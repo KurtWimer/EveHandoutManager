@@ -1,47 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_medium"
-        android:layout_marginTop="@dimen/padding_medium"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_airplanemode_active_24" />
+    <data>
+        <variable
+            name="handout"
+            type="com.example.evehandoutmanager.home.Handout" />
+        <variable
+            name="removeListener"
+            type="com.example.evehandoutmanager.home.HandoutRemoveListener" />
+    </data>
 
-    <TextView
-        android:id="@+id/shipName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        tools:text="Wreckavak v2" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/characterName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/shipName"
-        app:layout_constraintStart_toEndOf="@+id/shipName"
-        tools:text="Frederick Vonhole" />
+        <ImageView
+            android:id="@+id/shipImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/padding_medium"
+            android:layout_marginTop="@dimen/padding_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_baseline_airplanemode_active_24" />
 
-    <ImageView
-        android:id="@+id/removeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/padding_medium"
-        android:backgroundTint="@color/design_default_color_background"
-        app:layout_constraintBottom_toBottomOf="@+id/characterName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/characterName"
-        app:srcCompat="@drawable/ic_baseline_remove_circle_24"
-        android:contentDescription="@string/remove_handout" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/shipName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/shipImage"
+            app:layout_constraintStart_toEndOf="@+id/shipImage"
+            tools:text="Wreckavak v2" />
+
+        <TextView
+            android:id="@+id/characterName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="@+id/shipName"
+            app:layout_constraintStart_toEndOf="@+id/shipName"
+            tools:text="Frederick Vonhole" />
+
+        <ImageView
+            android:id="@+id/removeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/padding_medium"
+            android:backgroundTint="@color/design_default_color_background"
+            app:layout_constraintBottom_toBottomOf="@+id/characterName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/characterName"
+            app:srcCompat="@drawable/ic_baseline_remove_circle_24"
+            android:contentDescription="@string/remove_handout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
