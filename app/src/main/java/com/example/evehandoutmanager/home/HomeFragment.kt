@@ -6,12 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.example.evehandoutmanager.R
 import com.example.evehandoutmanager.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
     var _binding : FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private val homeViewModel : HomeViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

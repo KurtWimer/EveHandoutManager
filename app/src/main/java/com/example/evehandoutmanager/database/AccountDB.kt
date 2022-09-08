@@ -4,6 +4,7 @@ import com.example.evehandoutmanager.accounts.Account
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import com.example.evehandoutmanager.home.Handout
 
 @Dao
 interface AccountDao {
@@ -17,19 +18,32 @@ interface AccountDao {
     fun delete(account: Account)
 }
 
-@Database(entities = [Account::class], version = 1)
-abstract class AccountDatabase : RoomDatabase() {
-    abstract val accountDao : AccountDao
+@Dao
+interface HandoutDao {
+    @Query("SELECT * FROM handout")
+    fun getHandouts() : LiveData<List<Handout>>
+    
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insert(vararg handouts: Handout)
+    
+    @Delete
+    fun delete(entry : Handout)
 }
 
-private lateinit var INSTANCE: AccountDatabase
+@Database(entities = [Account::class, Handout::class], version = 1)
+abstract class LocalDatabase : RoomDatabase() {
+    abstract val accountDao : AccountDao
+    abstract val handoutDao : HandoutDao
+}
 
-fun getDatabase(context: Context): AccountDatabase {
-        synchronized(AccountDatabase::class.java) {
+private lateinit var INSTANCE: LocalDatabase
+
+fun getDatabase(context: Context): LocalDatabase {
+        synchronized(LocalDatabase::class.java) {
     if (!::INSTANCE.isInitialized) {
         INSTANCE = Room.databaseBuilder(context.applicationContext,
-            AccountDatabase::class.java,
-            "accounts").build()
+            LocalDatabase::class.java,
+            "HandoutManagerDB").build()
     }
 }
 return INSTANCE

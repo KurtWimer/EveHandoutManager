@@ -61,7 +61,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/character_name"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/character_name"
-                android:onClick="@{() -> logoutListener.onClick(account)}"/>
+                android:onClick="@{() -> logoutListener.onClick(account)}" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
