@@ -21,6 +21,14 @@ interface ESIInterface {
     fun getPortrait(
         @Path("id") characterID : String,
         @Query("datasource") datasource: String = DATASOURCE) : Call<Portrait>
+
+    @GET("characters/{id}/wallet/journal")
+    fun getWalletJournal(
+        @Path("id") characterID: String,
+        @Query("token") accessToken: String,
+        //maximum entries per page is 2500 if for some reason more was needed a method for determining how many pages is necessary would be needed
+        @Query("page") page: Int = 1
+    )
 }
 
 object Esi {
