@@ -1,5 +1,6 @@
 package com.example.evehandoutmanager.network
 
+import com.example.evehandoutmanager.home.WalletEntry
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -28,12 +29,11 @@ interface ESIInterface {
         @Query("token") accessToken: String,
         //maximum entries per page is 2500 if for some reason more was needed a method for determining how many pages is necessary would be needed
         @Query("page") page: Int = 1
-    )
+    ) : Call<List<WalletEntry>>
 }
 
 object Esi {
     private val client =  OkHttpClient.Builder()
-        //.addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         //TODO rate limit requests https://stackoverflow.com/questions/41309103/how-can-i-queue-up-and-delay-retrofit-requests-to-avoid-hitting-an-api-rate-limi
         .build()

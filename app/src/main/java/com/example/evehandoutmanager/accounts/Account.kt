@@ -12,6 +12,7 @@ data class Account constructor(
     @PrimaryKey
     val name : String,
     val iconURL: String,
+    val characterID: String,
     val AccessToken: String,
     val RefreshToken: String)
 

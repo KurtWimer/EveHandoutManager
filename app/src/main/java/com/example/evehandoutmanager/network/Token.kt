@@ -14,14 +14,6 @@ data class Token(
         get() = requireNotNull(JWT(this.accessToken).subject).split(":").last()
     //private val jwt = JWT(this.accessToken)
 
-    fun getExpiration(): Date {
-        return requireNotNull(JWT(this.accessToken).expiresAt)
-    }
-
-    fun isExpired(): Boolean {
-        return requireNotNull(JWT(this.accessToken).isExpired(0))
-    }
-
     fun validate(): Boolean {
         fun validateIssuer(): Boolean {
             return when (JWT(this.accessToken).issuer){

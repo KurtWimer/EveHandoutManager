@@ -53,7 +53,7 @@ class AccountViewModel (private val app: Application, private val state : SavedS
             if (token.validate()){
                 Log.i("CharacterViewModel", "received authorization token")
                 val (name, iconUrl) = fetchInformation(token.charcterID)
-                val newChar = Account(name, iconUrl, token.accessToken, token.refreshToken)
+                val newChar = Account(name, token.charcterID, iconUrl, token.accessToken, token.refreshToken)
                 withContext(Dispatchers.IO){
                     database.accountDao.insert(newChar)
                 }

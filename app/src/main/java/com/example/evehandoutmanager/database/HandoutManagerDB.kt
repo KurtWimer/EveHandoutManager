@@ -22,6 +22,9 @@ interface AccountDao {
 interface HandoutDao {
     @Query("SELECT * FROM handout")
     fun getHandouts() : LiveData<List<Handout>>
+
+    @Query ("SELECT * FROM handout WHERE receiverID = :id")
+    fun getPlayersHandouts(id : Int) : List<Handout>
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg handouts: Handout)
@@ -30,7 +33,7 @@ interface HandoutDao {
     fun delete(entry : Handout)
 }
 
-@Database(entities = [Account::class, Handout::class], version = 1)
+@Database(entities = [Account::class, Handout::class], version = 2)
 abstract class LocalDatabase : RoomDatabase() {
     abstract val accountDao : AccountDao
     abstract val handoutDao : HandoutDao
@@ -43,7 +46,7 @@ fun getDatabase(context: Context): LocalDatabase {
     if (!::INSTANCE.isInitialized) {
         INSTANCE = Room.databaseBuilder(context.applicationContext,
             LocalDatabase::class.java,
-            "HandoutManagerDB").build()
+            "HandoutManagerDB").fallbackToDestructiveMigration().build()
     }
 }
 return INSTANCE

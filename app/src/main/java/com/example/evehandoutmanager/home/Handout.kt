@@ -8,4 +8,5 @@ data class Handout (
     @PrimaryKey
     val id : Int,
     val shipName : String,
-    val receiverName: String)
+    val receiverName: String,
+    val receiverID: Int)
