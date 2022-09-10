@@ -25,7 +25,10 @@ interface HandoutDao {
 
     @Query ("SELECT * FROM handout WHERE receiverID = :id")
     fun getPlayersHandouts(id : Int) : List<Handout>
-    
+
+    @Query("SELECT * FROM handout ORDER BY id DESC LIMIT 1")
+    fun getMostRecentHandout(): Handout
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg handouts: Handout)
     

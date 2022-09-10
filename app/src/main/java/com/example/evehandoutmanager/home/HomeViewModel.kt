@@ -9,6 +9,7 @@ import com.example.evehandoutmanager.database.getDatabase
 import com.example.evehandoutmanager.network.Esi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.internal.toImmutableList
 import retrofit2.await
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
@@ -23,37 +24,45 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     suspend fun processNewTrades(){
+        suspend fun getNewHandouts(trades : List<WalletEntry>): List<Handout> {
+            val newHandouts = mutableListOf<Handout>()
+            for (trade in trades){
+                val shipName = trade.amount.toString() //TODO reference fleet setup to name trade
+                val receiverName = Esi.retrofitInterface.getCharacter(trade.secondPartyId.toString())
+                    .await().name!!
+                newHandouts.add(Handout(trade.id, shipName, receiverName, trade.secondPartyId))
+            }
+            return newHandouts.toImmutableList()
+        }
+
+        fun processReturns(trades: List<WalletEntry>){
+            for (trade in trades){
+                val potentialMatches = database.handoutDao.getPlayersHandouts(trade.secondPartyId)
+                when (potentialMatches.size){
+                    0 -> Log.d("HomeViewModel", "Unable to find matching trade: $trade")
+                    1 -> database.handoutDao.delete(potentialMatches.first())
+                    else -> {
+                        //TODO handle multiple trades from a single source
+                        Log.d("HomeViewModel", "Multiple matching trades")
+                    }
+                }
+            }
+        }
+
         withContext(Dispatchers.IO) {
+            //Get most recent trade ID to filter out already processed trades
+            val mostRecentTradeID = database.handoutDao.getMostRecentHandout().id
             for (account in _accountList.value!!) {
                 if (isTokenExpired(account.AccessToken)) {
                     //TODO update access token
                 }
                 val journal = Esi.retrofitInterface.getWalletJournal(account.characterID, account.AccessToken).await()
-                val trades = journal.filter { it.refType == "player_trading" }
-                var newHandouts = mutableListOf<Handout>()
-                //Find all new handouts
-                //TODO filter journal to ignore already processed trades
-                for (trade in trades.filter { it.amount in 1..9999 }){
-                    val shipName = trade.amount.toString() //TODO reference fleet setup to name trade
-                    val receiverName = Esi.retrofitInterface.getCharacter(trade.secondPartyId.toString())
-                        .await().name!!
-                    newHandouts.add(Handout(trade.id, shipName, receiverName, trade.secondPartyId))
-                }
+                val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID}
+                val newHandouts = getNewHandouts(trades.filter { it.amount in 1..9999 })
+                processReturns(trades.filter { it.amount == 0 })
                 //add all new handouts to DB
                 if (newHandouts.isNotEmpty()){
                     database.handoutDao.insert(*newHandouts.toTypedArray())
-                }
-                //remove all ship return
-                for (trade in trades.filter { it.amount == 0 }){
-                    val potentialMatches = database.handoutDao.getPlayersHandouts(trade.secondPartyId)
-                    when (potentialMatches.size){
-                        0 -> Log.d("HomeViewModel", "Unable to find matching trade: ${trade.toString()}")
-                        1 -> database.handoutDao.delete(potentialMatches.first())
-                        else -> {
-                            //TODO handle multiple trades from a single source
-                            Log.d("HomeViewModel", "Multiple matching trades")
-                        }
-                    }
                 }
             }
         }
