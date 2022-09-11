@@ -57,7 +57,6 @@ class AccountFragment : Fragment() {
             }
         }
 
-        //TODO datasource
         return binding.root
     }
 

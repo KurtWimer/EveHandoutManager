@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Handout (
     @PrimaryKey
-    val id : Int,
+    val id : Long,
     val shipName : String,
     val receiverName: String,
     val receiverID: Int)

@@ -36,7 +36,7 @@ interface HandoutDao {
     fun delete(entry : Handout)
 }
 
-@Database(entities = [Account::class, Handout::class], version = 2)
+@Database(entities = [Account::class, Handout::class], version = 4)
 abstract class LocalDatabase : RoomDatabase() {
     abstract val accountDao : AccountDao
     abstract val handoutDao : HandoutDao
@@ -45,12 +45,12 @@ abstract class LocalDatabase : RoomDatabase() {
 private lateinit var INSTANCE: LocalDatabase
 
 fun getDatabase(context: Context): LocalDatabase {
-        synchronized(LocalDatabase::class.java) {
-    if (!::INSTANCE.isInitialized) {
-        INSTANCE = Room.databaseBuilder(context.applicationContext,
-            LocalDatabase::class.java,
-            "HandoutManagerDB").fallbackToDestructiveMigration().build()
+    synchronized(LocalDatabase::class.java) {
+        if (!::INSTANCE.isInitialized) {
+            INSTANCE = Room.databaseBuilder(context.applicationContext,
+                LocalDatabase::class.java,
+                "HandoutManagerDB").fallbackToDestructiveMigration().build()
+        }
     }
-}
-return INSTANCE
+    return INSTANCE
 }

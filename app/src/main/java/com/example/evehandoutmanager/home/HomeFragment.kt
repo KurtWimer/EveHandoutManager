@@ -28,6 +28,7 @@ class HomeFragment : Fragment() {
         //bind data to viewModel
         _binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.viewModel = homeViewModel
+        binding.handoutList.adapter = adapter
 
         //Set Up Live Data Observers
         homeViewModel.handoutList.observe(viewLifecycleOwner) {
@@ -36,7 +37,12 @@ class HomeFragment : Fragment() {
                 adapter.submitList(it.toImmutableList())
             }
         }
-        binding.handoutList.adapter = adapter
+
+        homeViewModel.accountList.observe(viewLifecycleOwner) {
+            it?.let {
+                homeViewModel.updateAccounts(it.toImmutableList())
+            }
+        }
 
         return binding.root
     }
