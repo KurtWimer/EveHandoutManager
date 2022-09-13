@@ -14,7 +14,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/shipImage"
@@ -30,7 +30,8 @@
             android:id="@+id/shipName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:layout_marginStart="16dp"
+            android:text="@{handout.shipName}"
             app:layout_constraintBottom_toBottomOf="@+id/shipImage"
             app:layout_constraintStart_toEndOf="@+id/shipImage"
             tools:text="Wreckavak v2" />
@@ -39,7 +40,8 @@
             android:id="@+id/characterName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
+            android:layout_marginStart="16dp"
+            android:text="@{handout.receiverName}"
             app:layout_constraintBottom_toBottomOf="@+id/shipName"
             app:layout_constraintStart_toEndOf="@+id/shipName"
             tools:text="Frederick Vonhole" />
@@ -50,10 +52,11 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/padding_medium"
             android:backgroundTint="@color/design_default_color_background"
+            android:contentDescription="@string/remove_handout"
             app:layout_constraintBottom_toBottomOf="@+id/characterName"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/characterName"
-            app:srcCompat="@drawable/ic_baseline_remove_circle_24"
-            android:contentDescription="@string/remove_handout" />
+            app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

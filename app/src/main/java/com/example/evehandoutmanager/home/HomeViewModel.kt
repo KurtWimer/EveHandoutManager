@@ -33,16 +33,16 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                 val newHandouts = mutableListOf<Handout>()
                 for (trade in trades){
                     val shipName = trade.amount.toString() //TODO reference fleet setup to name trade
-                    val receiverName = Esi.retrofitInterface.getCharacter(trade.secondPartyId.toString())
+                    val receiverName = Esi.retrofitInterface.getCharacter(trade.firstPartyId.toString())
                         .await().name!!
-                    newHandouts.add(Handout(trade.id.toLong(), shipName, receiverName, trade.secondPartyId))
+                    newHandouts.add(Handout(trade.id, shipName, receiverName, trade.firstPartyId))
                 }
                 return newHandouts.toImmutableList()
             }
 
             fun processReturns(trades: List<WalletEntry>){
                 for (trade in trades){
-                    val potentialMatches = database.handoutDao.getPlayersHandouts(trade.secondPartyId)
+                    val potentialMatches = database.handoutDao.getPlayersHandouts(trade.firstPartyId)
                     when (potentialMatches.size){
                         0 -> Log.d("HomeViewModel", "Unable to find matching trade: $trade")
                         1 -> database.handoutDao.delete(potentialMatches.first())
@@ -63,17 +63,18 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                             return@withContext
                             //TODO update access token
                         }
+                        //Get and filter all wallet transaction to find ship handouts
                         val journal = Esi.retrofitInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
-                        val trades = journal.filter { it.refType == "player_trading" && it.id.toLong() > mostRecentTradeID}
+                        val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID}
                         val newHandouts = getNewHandouts(trades.filter { it.amount in 1..9999 })
-                        processReturns(trades.filter { it.amount == 0 })
                         //add all new handouts to DB
                         if (newHandouts.isNotEmpty()){
                             database.handoutDao.insert(*newHandouts.toTypedArray())
                         }
+                        processReturns(trades.filter { it.amount == 0 })
                     }
                 }else{
-                    Log.d("HomeViewModel", "No Accounts found ${accounts}")
+                    Log.d("HomeViewModel", "No Accounts found $accounts")
                     //TODO warn user to login
                 }
             }
