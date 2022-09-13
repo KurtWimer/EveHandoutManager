@@ -24,7 +24,11 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         get() = _HandoutList
 
     fun onRemoveButtonClick(handout: Handout) {
-        database.handoutDao.delete(handout)
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                database.handoutDao.delete(handout)
+            }
+        }
     }
 
     fun processNewTrades(){

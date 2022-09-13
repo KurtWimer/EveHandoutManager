@@ -66,7 +66,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/characterName"
-                app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
+                app:srcCompat="@drawable/ic_baseline_remove_circle_24"
+                android:onClick="@{() -> removeListener.onClick(handout)}"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
