@@ -15,4 +15,7 @@
     <string name="fleet_setup">Fleet Setup</string>
     <string name="fetch_trades">Fetch Trades</string>
     <string name="image_of_ship">Image of ship</string>
+    <string name="add_new_ship">Add New Ship</string>
+    <string name="isk_value">Isk Value</string>
+    <string name="ship_name">Ship Name</string>
 </resources>
