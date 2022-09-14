@@ -25,6 +25,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     val handoutList : LiveData<List<Handout>>
         get() = _HandoutList
     private val clientID = app.getString(R.string.client_id)
+    private var mostRecentTradeID : Long = 0
 
     fun onRemoveButtonClick(handout: Handout) {
         viewModelScope.launch {
@@ -47,23 +48,24 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                 return newHandouts.toImmutableList()
             }
 
+            //Removes ship returns
+            //Assumes each character only gets one Handout, if the character gets multiple it will
+            //return the ships in the order they were handed out
             fun processReturns(trades: List<WalletEntry>){
                 for (trade in trades){
+                    if (trade.id > mostRecentTradeID) mostRecentTradeID = trade.id
                     val potentialMatches = database.handoutDao.getPlayersHandouts(trade.firstPartyId)
                     when (potentialMatches.size){
                         0 -> Log.d("HomeViewModel", "Unable to find matching trade: $trade")
-                        1 -> database.handoutDao.delete(potentialMatches.first())
-                        else -> {
-                            //TODO handle multiple trades from a single source
-                            Log.d("HomeViewModel", "Multiple matching trades")
-                        }
+                        else -> database.handoutDao.delete(potentialMatches.first())
                     }
                 }
             }
 
             withContext(Dispatchers.IO) {
                 //Get most recent trade ID to filter out already processed trades
-                val mostRecentTradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0
+                val tradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0
+                if (tradeID > mostRecentTradeID) mostRecentTradeID = tradeID
                 if (accounts != null){
                     for (account in accounts!!) {
                         if (isTokenExpired(account.AccessToken)) { //Refresh Access Token Before Proceeding
@@ -74,7 +76,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                         }
                         //Get and filter all wallet transaction to find ship handouts
                         val journal = Esi.retrofitInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
-                        val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID}
+                        val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID }
                         val newHandouts = getNewHandouts(trades.filter { it.amount in 1..9999 })
                         //add all new handouts to DB
                         if (newHandouts.isNotEmpty()){
