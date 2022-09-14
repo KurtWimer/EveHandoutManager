@@ -14,6 +14,9 @@ interface AccountDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(account : Account)
 
+    @Update(entity = Account::class)
+    fun update(account: Account)
+
     @Delete
     fun delete(account: Account)
 }

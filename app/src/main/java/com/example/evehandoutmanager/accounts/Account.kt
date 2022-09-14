@@ -13,8 +13,8 @@ data class Account constructor(
     val name : String,
     val iconURL: String,
     val characterID: Int,
-    val AccessToken: String,
-    val RefreshToken: String)
+    var AccessToken: String,
+    var RefreshToken: String)
 
 //Utility function allows all com.example.evehandoutmanager.network calls to be done before creating a Character object
 suspend fun fetchInformation(characterID: String): Pair<String, String> {

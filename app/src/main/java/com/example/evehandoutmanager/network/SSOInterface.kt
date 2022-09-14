@@ -24,6 +24,19 @@ interface SSOInterface {
         @Field("code_verifier") verifier: String,
         @Field("authority") authority: String = "https://login.eveonline.com/v2/oauth/token",
         @Field("grant_type") grant: String = "authorization_code") : Call<Token>
+
+    @FormUrlEncoded
+    @Headers(
+        "Content-Type: application/x-www-form-urlencoded",
+        "Host: login.eveonline.com"
+    )
+
+    @POST("token")
+    fun refreshAccessToken(
+        @Field("refresh_token") refreshToken: String,
+        @Field("client_id") clientID: String,
+        @Field("grant_type") grantType: String = "refresh_token",
+    ) : Call<Token>
 }
 
 object Sso {

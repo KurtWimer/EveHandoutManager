@@ -6,9 +6,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.auth0.android.jwt.JWT
+import com.example.evehandoutmanager.R
 import com.example.evehandoutmanager.accounts.Account
 import com.example.evehandoutmanager.database.getDatabase
 import com.example.evehandoutmanager.network.Esi
+import com.example.evehandoutmanager.network.Sso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -19,9 +21,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val database = getDatabase(app)
     val accountList = database.accountDao.getAccounts()
     private var accounts : List<Account>? = null //mirrors accountList but as static data instead of LiveData
-    val _HandoutList = database.handoutDao.getHandouts()
+    private val _HandoutList = database.handoutDao.getHandouts()
     val handoutList : LiveData<List<Handout>>
         get() = _HandoutList
+    private val clientID = app.getString(R.string.client_id)
 
     fun onRemoveButtonClick(handout: Handout) {
         viewModelScope.launch {
@@ -63,9 +66,11 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                 val mostRecentTradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0
                 if (accounts != null){
                     for (account in accounts!!) {
-                        if (isTokenExpired(account.AccessToken)) {
-                            return@withContext
-                            //TODO update access token
+                        if (isTokenExpired(account.AccessToken)) { //Refresh Access Token Before Proceeding
+                            val newToken = Sso.retrofitInterface.refreshAccessToken(account.RefreshToken, clientID).await()
+                            account.AccessToken = newToken.accessToken
+                            account.RefreshToken = newToken.refreshToken
+                            database.accountDao.update(account)
                         }
                         //Get and filter all wallet transaction to find ship handouts
                         val journal = Esi.retrofitInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
