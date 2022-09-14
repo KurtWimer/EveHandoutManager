@@ -33,7 +33,6 @@ class AccountViewModel (private val app: Application, private val state : SavedS
         sharedPreferences.edit().apply {
             putString("verifier", verifier)
         }.commit()
-        requireNotNull(sharedPreferences.getString("verifier", null))
         val intent = ESIRepo.getLoginIntent(
             app.getString(R.string.client_id),
             app.getString(R.string.redirect_uri),

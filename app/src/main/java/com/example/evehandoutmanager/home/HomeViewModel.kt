@@ -1,6 +1,7 @@
 package com.example.evehandoutmanager.home
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -18,6 +19,7 @@ import okhttp3.internal.toImmutableList
 import retrofit2.await
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
+    private val sharedPreferences = app.getSharedPreferences("EHMPreferences", Context.MODE_PRIVATE)
     private val database = getDatabase(app)
     val accountList = database.accountDao.getAccounts()
     private var accounts : List<Account>? = null //mirrors accountList but as static data instead of LiveData
@@ -25,7 +27,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     val handoutList : LiveData<List<Handout>>
         get() = _HandoutList
     private val clientID = app.getString(R.string.client_id)
-    private var mostRecentTradeID : Long = 0
+    private var mostRecentTradeID : Long = sharedPreferences.getLong("mostRecentTradeID", 0)
 
     fun onRemoveButtonClick(handout: Handout) {
         viewModelScope.launch {
@@ -53,7 +55,12 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             //return the ships in the order they were handed out
             fun processReturns(trades: List<WalletEntry>){
                 for (trade in trades){
-                    if (trade.id > mostRecentTradeID) mostRecentTradeID = trade.id
+                    if (trade.id > mostRecentTradeID) {
+                        sharedPreferences.edit().apply {
+                            putLong("mostRecentTradeID", trade.id)
+                        }.apply()
+                        mostRecentTradeID = trade.id
+                    }
                     val potentialMatches = database.handoutDao.getPlayersHandouts(trade.firstPartyId)
                     when (potentialMatches.size){
                         0 -> Log.d("HomeViewModel", "Unable to find matching trade: $trade")
@@ -65,7 +72,12 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             withContext(Dispatchers.IO) {
                 //Get most recent trade ID to filter out already processed trades
                 val tradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0
-                if (tradeID > mostRecentTradeID) mostRecentTradeID = tradeID
+                if (tradeID > mostRecentTradeID){
+                    sharedPreferences.edit().apply {
+                        putLong("mostRecentTradeID", tradeID)
+                    }.apply()
+                    mostRecentTradeID = tradeID
+                }
                 if (accounts != null){
                     for (account in accounts!!) {
                         if (isTokenExpired(account.AccessToken)) { //Refresh Access Token Before Proceeding
