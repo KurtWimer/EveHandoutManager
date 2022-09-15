@@ -1,6 +1,16 @@
 package com.example.evehandoutmanager.fleetConfiguration
 
-import androidx.lifecycle.SavedStateHandle
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import com.example.evehandoutmanager.database.getDatabase
 
-class FleetConfigurationViewModel(private val savedStateHandle: SavedStateHandle) {
+class FleetConfigurationViewModel(app: Application) : AndroidViewModel(app) {
+    private val database = getDatabase(app)
+
+    private val _configList = database.fleetDao.getConfigLive()
+    val configList: LiveData<List<FleetConfigItem>>
+        get() = _configList
+
+
 }

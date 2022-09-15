@@ -42,6 +42,9 @@ interface HandoutDao {
 @Dao
 interface FleetDao {
     @Query("Select * FROM FleetConfigItem")
+    fun getConfigLive() : LiveData<List<FleetConfigItem>>
+
+    @Query("Select * FROM FleetConfigItem")
     fun getConfig() : List<FleetConfigItem>
 
     @Insert

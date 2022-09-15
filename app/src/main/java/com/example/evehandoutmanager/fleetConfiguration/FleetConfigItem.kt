@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class FleetConfigItem (
+data class FleetConfigItem (
     @PrimaryKey
     val iskValue: Int,
     val shipName: String

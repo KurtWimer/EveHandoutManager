@@ -5,10 +5,10 @@
     <data>
         <variable
             name="fleetConfigItem"
-            type="com.example.evehandoutmanager.home.Handout" />
+            type="com.example.evehandoutmanager.fleetConfiguration.FleetConfigItem" />
         <variable
             name="removeListener"
-            type="com.example.evehandoutmanager.home.HandoutRemoveListener" />
+            type="com.example.evehandoutmanager.fleetConfiguration.FleetRemoveListener" />
     </data>
 
     <androidx.cardview.widget.CardView
