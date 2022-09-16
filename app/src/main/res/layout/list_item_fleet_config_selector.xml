@@ -35,7 +35,7 @@
                 android:layout_width="30dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="@dimen/padding_small"
-                android:text="@{fleetConfigItem.iskValue}"
+                android:text="@{String.valueOf(fleetConfigItem.iskValue)}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ValueTextField"
                 app:layout_constraintTop_toTopOf="@id/ValueTextField" />

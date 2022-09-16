@@ -12,8 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.evehandoutmanager.network.ESIRepo
 
-class AccountViewModel (private val app: Application)
-        : AndroidViewModel(app){
+class AccountViewModel (private val app: Application) : AndroidViewModel(app){
     private val sharedPreferences = app.getSharedPreferences("EHMPreferences", MODE_PRIVATE)
 
     private val _navigateToSSO = MutableLiveData<Intent?>(null)

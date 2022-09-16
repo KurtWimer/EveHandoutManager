@@ -48,7 +48,7 @@
                     android:layout_marginStart="4dp"
                     android:autofillHints="0"
                     android:inputType="number"
-                    android:text="@{viewModel.newConfig.iskValue}"
+                    android:text="@{String.valueOf(viewModel.newConfig.iskValue)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ValueTextField"
                     app:layout_constraintTop_toTopOf="parent" />

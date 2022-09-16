@@ -23,9 +23,9 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val database = getDatabase(app)
     val accountList = database.accountDao.getAccounts()
     private var accounts : List<Account>? = null //mirrors accountList but as static data instead of LiveData
-    private val _HandoutList = database.handoutDao.getHandouts()
+    private val _handoutList = database.handoutDao.getHandouts()
     val handoutList : LiveData<List<Handout>>
-        get() = _HandoutList
+        get() = _handoutList
     private val clientID = app.getString(R.string.client_id)
     private var mostRecentTradeID : Long = sharedPreferences.getLong("mostRecentTradeID", 0)
 

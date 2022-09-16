@@ -27,5 +27,8 @@
             app:argType="string"
             app:nullable="true"/>
     </fragment>
-    <fragment android:id="@+id/Settings" />
+    <fragment
+        android:id="@+id/FleetSetup"
+        android:name="com.example.evehandoutmanager.fleetConfiguration.FleetConfigurationFragment"
+        android:label="@string/fleet_setup"/>
 </navigation>

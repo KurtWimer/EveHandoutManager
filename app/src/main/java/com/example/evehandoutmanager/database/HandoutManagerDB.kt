@@ -54,7 +54,7 @@ interface FleetDao {
     fun delete(entry: FleetConfigItem)
 }
 
-@Database(entities = [Account::class, Handout::class, FleetConfigItem::class], version = 4)
+@Database(entities = [Account::class, Handout::class, FleetConfigItem::class], version = 5)
 abstract class LocalDatabase : RoomDatabase() {
     abstract val accountDao : AccountDao
     abstract val handoutDao : HandoutDao

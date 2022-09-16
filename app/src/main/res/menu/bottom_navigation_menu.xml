@@ -13,9 +13,8 @@
         android:title="@string/home"/>
 
     <item
-        android:id="@+id/Settings"
+        android:id="@+id/FleetSetup"
         android:enabled="true"
-        android:icon="@drawable/ic_baseline_settings_24"
-        android:title="@string/settings"/>
-
+        android:icon="@drawable/ic_baseline_airplanemode_active_24"
+        android:title="@string/fleet_setup"/>
 </menu>
