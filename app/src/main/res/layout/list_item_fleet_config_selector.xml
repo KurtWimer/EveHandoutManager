@@ -26,21 +26,19 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/padding_medium"
                 android:text="@string/isk_value"
-                android:labelFor="@+id/iskValue"
                 app:layout_constraintEnd_toStartOf="@id/iskValue"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <TextView
                 android:id="@+id/iskValue"
                 android:layout_width="30dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="@dimen/padding_small"
-                android:inputType="number"
+                android:text="@{fleetConfigItem.iskValue}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ValueTextField"
-                app:layout_constraintTop_toTopOf="@id/ValueTextField"
-                android:autofillHints="0" />
+                app:layout_constraintTop_toTopOf="@id/ValueTextField" />
 
             <TextView
                 android:id="@+id/ShipNameText"
@@ -48,20 +46,18 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/padding_medium"
                 android:text="@string/ship_name"
-                android:labelFor="@+id/shipName"
                 app:layout_constraintStart_toEndOf="@id/iskValue"
                 app:layout_constraintTop_toTopOf="@id/ValueTextField" />
 
-            <EditText
+            <TextView
                 android:id="@+id/shipName"
                 android:layout_width="100dp"
                 android:layout_height="15dp"
                 android:layout_marginStart="@dimen/padding_small"
+                android:text="@{fleetConfigItem.shipName}"
                 app:layout_constraintStart_toEndOf="@id/ShipNameText"
                 app:layout_constraintTop_toTopOf="@id/ValueTextField"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:autofillHints="Wreckevack"
-                android:inputType="text" />
+                app:layout_constraintBottom_toBottomOf="parent" />
 
             <ImageView
                 android:id="@+id/removeButton"
@@ -70,7 +66,7 @@
                 android:layout_marginEnd="@dimen/padding_medium"
                 android:backgroundTint="@color/design_default_color_background"
                 android:contentDescription="@string/remove_handout"
-                android:onClick="@{() -> removeListener.onClick()}"
+                android:onClick="@{() -> removeListener.onClick(fleetConfigItem)}"
                 app:layout_constraintBottom_toBottomOf="@+id/ValueTextField"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"

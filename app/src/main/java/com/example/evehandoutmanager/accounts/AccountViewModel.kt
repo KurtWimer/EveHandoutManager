@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.example.evehandoutmanager.network.ESIRepo
 
-class AccountViewModel (private val app: Application, private val state : SavedStateHandle)
+class AccountViewModel (private val app: Application)
         : AndroidViewModel(app){
     private val sharedPreferences = app.getSharedPreferences("EHMPreferences", MODE_PRIVATE)
 
