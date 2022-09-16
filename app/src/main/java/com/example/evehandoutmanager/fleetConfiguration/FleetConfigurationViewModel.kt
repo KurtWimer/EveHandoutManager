@@ -10,6 +10,7 @@ import kotlinx.coroutines.withContext
 
 class FleetConfigurationViewModel(app: Application) : AndroidViewModel(app) {
     private val database = getDatabase(app)
+    var newConfig = FleetConfigItem()
 
     val configList = database.fleetDao.getConfigLive()
 
@@ -25,6 +26,7 @@ class FleetConfigurationViewModel(app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 database.fleetDao.insert(item)
+                newConfig = FleetConfigItem()
             }
         }
     }

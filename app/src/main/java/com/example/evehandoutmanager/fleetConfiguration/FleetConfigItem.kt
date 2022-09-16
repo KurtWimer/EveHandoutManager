@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity
 data class FleetConfigItem (
     @PrimaryKey
-    val iskValue: Int,
-    val shipName: String
+    val iskValue: Int = 0,
+    val shipName: String = ""
 )

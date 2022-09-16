@@ -7,9 +7,6 @@
         <variable
             name="viewModel"
             type="com.example.evehandoutmanager.fleetConfiguration.FleetConfigurationViewModel" />
-        <variable
-            name="newConfig"
-            type="com.example.evehandoutmanager.fleetConfiguration.FleetConfigItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -51,11 +48,10 @@
                     android:layout_marginStart="4dp"
                     android:autofillHints="0"
                     android:inputType="number"
-                    android:text="@{newConfig.iskValue}"
+                    android:text="@{viewModel.newConfig.iskValue}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/ValueTextField"
-                    app:layout_constraintTop_toTopOf="parent
-" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/ShipNameText"
@@ -66,8 +62,7 @@
                     android:text="@string/ship_name"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/iskValue"
-                    app:layout_constraintTop_toTopOf="parent
-" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
                     android:id="@+id/shipName"
@@ -76,11 +71,10 @@
                     android:layout_marginStart="4dp"
                     android:autofillHints="Wreckevack"
                     android:inputType="text"
-                    android:text="@{newConfig.shipName}"
+                    android:text="@{viewModel.newConfig.shipName}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/ShipNameText"
-                    app:layout_constraintTop_toTopOf="parent
-" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
                     android:id="@+id/addButton"
@@ -88,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
                     android:contentDescription="@string/add_new_fleet_configuration_item"
-                    android:onClick="@{() -> viewModel.onAddNewClick(newConfig)}"
+                    android:onClick="@{() -> viewModel.onAddNewClick(viewModel.newConfig)}"
                     android:text="@string/add"
                     app:layout_constraintBottom_toBottomOf="@+id/ValueTextField"
                     app:layout_constraintEnd_toEndOf="parent"

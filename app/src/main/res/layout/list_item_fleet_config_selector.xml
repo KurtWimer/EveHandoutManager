@@ -73,8 +73,6 @@
                 app:layout_constraintStart_toEndOf="@id/shipName"
                 app:layout_constraintTop_toTopOf="@id/ValueTextField"
                 app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
