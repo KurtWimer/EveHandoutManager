@@ -37,7 +37,11 @@ interface HandoutDao {
     fun insert(vararg handouts: Handout)
     
     @Delete
-    fun delete(entry : Handout) }
+    fun delete(entry : Handout)
+
+    @Query("DELETE FROM handout")
+    fun deleteAll()
+}
 
 @Dao
 interface FleetDao {
@@ -52,9 +56,12 @@ interface FleetDao {
 
     @Delete
     fun delete(entry: FleetConfigItem)
+
+    @Query("DELETE FROM FleetConfigItem")
+    fun deleteAll()
 }
 
-@Database(entities = [Account::class, Handout::class, FleetConfigItem::class], version = 5)
+@Database(entities = [Account::class, Handout::class, FleetConfigItem::class], version = 6)
 abstract class LocalDatabase : RoomDatabase() {
     abstract val accountDao : AccountDao
     abstract val handoutDao : HandoutDao

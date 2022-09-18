@@ -29,13 +29,9 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val clientID = app.getString(R.string.client_id)
     private var mostRecentTradeID : Long = sharedPreferences.getLong("mostRecentTradeID", 0)
 
-    fun onRemoveButtonClick(handout: Handout) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                database.handoutDao.delete(handout)
-            }
-        }
-    }
+    fun onRemoveButtonClick(handout: Handout) { database.handoutDao.delete(handout) }
+
+    fun onRemoveAllButtonClick() { database.handoutDao.deleteAll() }
 
     fun processNewTrades(){
         viewModelScope.launch {

@@ -20,4 +20,5 @@
     <string name="ship_name">Ship Name</string>
     <string name="add_new_fleet_configuration_item">Add new fleet configuration item</string>
     <string name="add">Add</string>
+    <string name="remove_all">Remove All</string>
 </resources>

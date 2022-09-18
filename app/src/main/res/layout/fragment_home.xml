@@ -19,32 +19,31 @@
             android:layout_marginStart="@dimen/padding_medium"
             android:layout_marginEnd="@dimen/padding_medium"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/remove_all_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fleetSetupButton"
+            app:layout_constraintTop_toBottomOf="@+id/fetchTradesButton"
             app:layout_constraintVertical_bias="0.0" />
-
-        <Button
-            android:id="@+id/fleetSetupButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/padding_medium"
-            android:layout_marginTop="@dimen/padding_medium"
-            android:text="@string/fleet_setup"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/fetchTradesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/padding_medium"
+            android:onClick="@{() -> viewModel.processNewTrades()}"
             android:text="@string/fetch_trades"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/fleetSetupButton"
-            app:layout_constraintTop_toTopOf="@+id/fleetSetupButton"
-            android:onClick="@{() -> viewModel.processNewTrades()}"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/remove_all_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remove_all"
+            android:onClick="@{() -> viewModel.onRemoveAllButtonClick()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
