@@ -25,18 +25,18 @@ class FleetConfigurationViewModel(private val app: Application) : AndroidViewMod
 
     fun onAddNewClick(item: FleetConfigItem){
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            val errorBoolean : Boolean = withContext(Dispatchers.IO) {
                 val currentConfig = database.fleetDao.getConfig()
                 //Prevent duplicate primary keys
                 for (config in currentConfig){
-                    if (config.iskValue == item.iskValue){
-                        Toast.makeText(app, "Cannot add ship with duplicate ISK value", Toast.LENGTH_LONG).show()
-                        return@withContext
+                    if (config.iskValue == item.iskValue || item.iskValue == 0){
+                        return@withContext true
                     }
                 }
                 database.fleetDao.insert(item)
-                newConfig = FleetConfigItem()
+                return@withContext false
             }
+            if (errorBoolean) Toast.makeText(app, "Cannot add ship with duplicate ISK value", Toast.LENGTH_LONG).show()
         }
     }
 }

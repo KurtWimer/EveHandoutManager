@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -44,14 +43,13 @@
                 <EditText
                     android:id="@+id/iskValue"
                     android:layout_width="30dp"
-                    android:layout_height="15dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="4dp"
                     android:autofillHints="0"
                     android:inputType="number"
-                    android:text="@{String.valueOf(viewModel.newConfig.iskValue)}"
+                    android:text="@={`` + viewModel.newConfig.iskValue}"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/ValueTextField"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@+id/ValueTextField"/>
 
                 <TextView
                     android:id="@+id/ShipNameText"
@@ -67,14 +65,13 @@
                 <EditText
                     android:id="@+id/shipName"
                     android:layout_width="100dp"
-                    android:layout_height="15dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="4dp"
                     android:autofillHints="Wreckevack"
                     android:inputType="text"
-                    android:text="@{viewModel.newConfig.shipName}"
+                    android:text="@={viewModel.newConfig.shipName}"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/ShipNameText"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintStart_toEndOf="@id/ShipNameText"/>
 
                 <Button
                     android:id="@+id/addButton"
