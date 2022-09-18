@@ -42,7 +42,11 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             suspend fun getNewHandouts(trades : List<WalletEntry>): List<Handout> {
                 val newHandouts = mutableListOf<Handout>()
                 for (trade in trades){
-                    val shipName = trade.amount.toString() //TODO reference fleet setup to name trade
+                    val fleetConfig = database.fleetDao.getConfig()
+                    var shipName = "Unknown"
+                    for (item in fleetConfig){
+                        if (item.iskValue == trade.amount) shipName = item.shipName
+                    }
                     val receiverName = Esi.retrofitInterface.getCharacter(trade.firstPartyId.toString())
                         .await().name!!
                     newHandouts.add(Handout(trade.id, shipName, receiverName, trade.firstPartyId))
@@ -71,7 +75,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
             withContext(Dispatchers.IO) {
                 //Get most recent trade ID to filter out already processed trades
-                val tradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0
+                val tradeID = database.handoutDao.getMostRecentHandout().id
                 if (tradeID > mostRecentTradeID){
                     sharedPreferences.edit().apply {
                         putLong("mostRecentTradeID", tradeID)
