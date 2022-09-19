@@ -8,7 +8,7 @@
     <string name="domain">evehandoutmanager.app</string>
     <string name="state">test</string>
     <string name="logout">Logout</string>
-    <string name="account_page">Account Page</string>
+    <string name="account_page">Accounts</string>
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="remove_handout">Remove handout entry button</string>
