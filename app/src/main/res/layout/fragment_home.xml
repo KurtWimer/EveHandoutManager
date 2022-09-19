@@ -33,6 +33,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> viewModel.processNewTrades()}"
             android:text="@string/fetch_trades"
+            android:enabled="@{viewModel.fleetStarted ? true : false }"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
