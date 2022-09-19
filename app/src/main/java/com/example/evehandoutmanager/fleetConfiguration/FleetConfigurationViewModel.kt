@@ -23,6 +23,14 @@ class FleetConfigurationViewModel(private val app: Application) : AndroidViewMod
         }
     }
 
+    fun onRemoveAllButtonClick() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                database.handoutDao.deleteAll()
+            }
+        }
+    }
+
     fun onAddNewClick(item: FleetConfigItem){
         viewModelScope.launch {
             val errorBoolean : Boolean = withContext(Dispatchers.IO) {

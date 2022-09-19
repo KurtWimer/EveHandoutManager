@@ -37,9 +37,21 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             ?.let { DateFormat.getDateInstance().parse(it) ?: null}
     var fleetStarted : MutableLiveData<Boolean> = MutableLiveData<Boolean>(fleetStartTime != null)
 
-    fun onRemoveButtonClick(handout: Handout) { database.handoutDao.delete(handout) }
+    fun onRemoveButtonClick(handout: Handout) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                database.handoutDao.delete(handout)
+            }
+        }
+    }
 
-    fun onRemoveAllButtonClick() { database.handoutDao.deleteAll() }
+    fun onRemoveAllButtonClick() {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                database.handoutDao.deleteAll()
+            }
+        }
+    }
 
     @SuppressLint("ApplySharedPref")
     fun onStartToggleButtonClick() {
