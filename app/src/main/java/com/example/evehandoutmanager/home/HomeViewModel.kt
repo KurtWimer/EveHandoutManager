@@ -1,10 +1,12 @@
 package com.example.evehandoutmanager.home
 
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.auth0.android.jwt.JWT
 import com.example.evehandoutmanager.R
@@ -16,7 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.toImmutableList
+import retrofit2.CallAdapter
 import retrofit2.await
+import java.text.DateFormat
+import java.util.*
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val sharedPreferences = app.getSharedPreferences("EHMPreferences", Context.MODE_PRIVATE)
@@ -28,10 +33,33 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         get() = _handoutList
     private val clientID = app.getString(R.string.client_id)
     private var mostRecentTradeID : Long = sharedPreferences.getLong("mostRecentTradeID", 0)
+    private var fleetStartTime : Date? = sharedPreferences.getString("startTime", null)
+            ?.let { DateFormat.getDateInstance().parse(it) ?: null}
+    var fleetStarted : MutableLiveData<Boolean> = MutableLiveData<Boolean>(fleetStartTime != null)
 
     fun onRemoveButtonClick(handout: Handout) { database.handoutDao.delete(handout) }
 
     fun onRemoveAllButtonClick() { database.handoutDao.deleteAll() }
+
+    @SuppressLint("ApplySharedPref")
+    fun onStartToggleButtonClick() {
+        if (fleetStartTime != null){
+            fleetStartTime = null
+            sharedPreferences.edit().putString("startTime", null).commit()
+            fleetStarted.value = false
+        } else {
+            viewModelScope.launch {
+                withContext(Dispatchers.IO){
+                    database.handoutDao.deleteAll()
+                }
+            }
+            val currentDate: Date = Calendar.getInstance().time
+            val currentDateString = DateFormat.getDateInstance().format(currentDate)
+            sharedPreferences.edit().putString("startTime", currentDateString).commit()
+            fleetStartTime = currentDate
+            fleetStarted.value = true
+        }
+    }
 
     fun processNewTrades(){
         viewModelScope.launch {
@@ -88,7 +116,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                         }
                         //Get and filter all wallet transaction to find ship handouts
                         val journal = Esi.retrofitInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
-                        val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID }
+                        val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID && convertDate(it.date).after(fleetStartTime) }
                         val newHandouts = getNewHandouts(trades.filter { it.amount in 1..9999 })
                         //add all new handouts to DB
                         if (newHandouts.isNotEmpty()){
@@ -103,6 +131,8 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             }
         }
     }
+
+    private fun convertDate(date: String): Date { return DateFormat.getDateInstance().parse(date)!! }
 
     private fun isTokenExpired(accessToken : String): Boolean {
         return requireNotNull(JWT(accessToken).isExpired(0))

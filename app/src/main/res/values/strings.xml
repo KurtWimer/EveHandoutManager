@@ -21,4 +21,6 @@
     <string name="add_new_fleet_configuration_item">Add new fleet configuration item</string>
     <string name="add">Add</string>
     <string name="remove_all">Remove All</string>
+    <string name="start_fleet">Start New Fleet</string>
+    <string name="stop_fleet">Stop Fleet</string>
 </resources>

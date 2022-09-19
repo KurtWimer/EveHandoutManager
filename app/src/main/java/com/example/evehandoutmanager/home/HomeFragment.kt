@@ -29,6 +29,7 @@ class HomeFragment : Fragment() {
         _binding  = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.viewModel = homeViewModel
         binding.handoutList.adapter = adapter
+        binding.lifecycleOwner = this
 
         //Set Up Live Data Observers
         homeViewModel.handoutList.observe(viewLifecycleOwner) {
