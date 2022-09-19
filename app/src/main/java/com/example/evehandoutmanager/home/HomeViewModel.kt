@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,7 +19,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.internal.toImmutableList
-import retrofit2.CallAdapter
 import retrofit2.await
 import java.text.DateFormat
 import java.util.*
@@ -43,6 +43,10 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     @SuppressLint("ApplySharedPref")
     fun onStartToggleButtonClick() {
+        if (accounts?.isEmpty() == true){
+            Toast.makeText(getApplication(), "Please sign in before starting a fleet", Toast.LENGTH_SHORT).show()
+        }
+
         if (fleetStartTime != null){
             fleetStartTime = null
             sharedPreferences.edit().putString("startTime", null).commit()
