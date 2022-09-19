@@ -26,7 +26,7 @@ class FleetConfigurationViewModel(private val app: Application) : AndroidViewMod
     fun onRemoveAllButtonClick() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                database.handoutDao.deleteAll()
+                database.fleetDao.deleteAll()
             }
         }
     }
