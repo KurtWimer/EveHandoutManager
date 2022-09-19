@@ -45,6 +45,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     fun onStartToggleButtonClick() {
         if (accounts?.isEmpty() == true){
             Toast.makeText(getApplication(), "Please sign in before starting a fleet", Toast.LENGTH_SHORT).show()
+            return
         }
 
         if (fleetStartTime != null){
