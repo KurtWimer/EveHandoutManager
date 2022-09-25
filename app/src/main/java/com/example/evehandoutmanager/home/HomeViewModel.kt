@@ -23,6 +23,7 @@ import retrofit2.await
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val sharedPreferences = app.getSharedPreferences("EHMPreferences", Context.MODE_PRIVATE)
@@ -34,8 +35,8 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         get() = _handoutList
     private val clientID = app.getString(R.string.client_id)
     private var mostRecentTradeID : Long = sharedPreferences.getLong("mostRecentTradeID", 0)
-    private var fleetStartTime : Date? = sharedPreferences.getString("startTime", null)
-            ?.let { DateFormat.getDateInstance().parse(it) ?: null}
+    private var fleetStartTime : Date? = sharedPreferences.getString("startTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
+    private var lastWalletFetchTime : Date? = sharedPreferences.getString("walletFetchTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
     var fleetStarted : MutableLiveData<Boolean> = MutableLiveData<Boolean>(fleetStartTime != null)
 
     fun onRemoveButtonClick(handout: Handout) {
@@ -61,7 +62,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             return
         }
 
-        if (fleetStartTime != null){
+        if (fleetStartTime != null){ //Stop fleet
             fleetStartTime = null
             sharedPreferences.edit().putString("startTime", null).commit()
             fleetStarted.value = false
@@ -72,7 +73,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                 }
             }
             val currentDate: Date = Calendar.getInstance().time
-            val currentDateString = DateFormat.getDateInstance().format(currentDate)
+            val currentDateString = DateFormat.getDateTimeInstance().format(currentDate)
             sharedPreferences.edit().putString("startTime", currentDateString).commit()
             fleetStartTime = currentDate
             fleetStarted.value = true
@@ -80,6 +81,23 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     }
 
     fun processNewTrades(){
+        //check if new data will be available
+        //ESI only allows wallet updates every 30 minutes
+        val currentDate: Date = Calendar.getInstance().time
+        if(lastWalletFetchTime!= null){
+            val timeDiffInMinutes = getDateDiff(lastWalletFetchTime!!, currentDate, TimeUnit.MINUTES)
+            val timeUntilNextUpdate = 30 - timeDiffInMinutes
+            if(lastWalletFetchTime != null &&  timeDiffInMinutes < 30){
+                Toast.makeText(getApplication(), "Next update available in $timeUntilNextUpdate minutes", Toast.LENGTH_SHORT).show()
+                return
+            }
+        }
+        else{
+            val currentDateString = DateFormat.getDateTimeInstance().format(currentDate)
+            sharedPreferences.edit().putString("walletFetchTime", currentDateString).commit()
+            lastWalletFetchTime = currentDate
+        }
+        //Else will get new data and can proceed
         viewModelScope.launch {
             suspend fun getNewHandouts(trades : List<WalletEntry>): List<Handout> {
                 val newHandouts = mutableListOf<Handout>()
@@ -117,7 +135,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
             withContext(Dispatchers.IO) {
                 //Get most recent trade ID to filter out already processed trades
-                val tradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0
+                val tradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0 //IDE lies this can absolutely return null do NOT refactor
                 if (tradeID > mostRecentTradeID){
                     sharedPreferences.edit().apply {
                         putLong("mostRecentTradeID", tradeID)
@@ -144,7 +162,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                     }
                 }else{
                     Log.d("HomeViewModel", "No Accounts found $accounts")
-                    //TODO warn user to login
+                    //This code should never be reached as the button is deactivated if accounts == null
                 }
             }
         }
@@ -155,6 +173,12 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private fun convertDate(date: String): Date {
         val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         return format.parse(date)!!
+    }
+
+    //shamelessly stolen from https://stackoverflow.com/questions/1555262/calculating-the-difference-between-two-java-date-instances
+    private fun getDateDiff(date1: Date, date2: Date, timeUnit: TimeUnit): Long {
+        val diffInMillies = date2.time - date1.time
+        return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS)
     }
 
     private fun isTokenExpired(accessToken : String): Boolean {
