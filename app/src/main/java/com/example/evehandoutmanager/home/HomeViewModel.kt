@@ -116,7 +116,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
             withContext(Dispatchers.IO) {
                 //Get most recent trade ID to filter out already processed trades
-                val tradeID = database.handoutDao.getMostRecentHandout().id
+                val tradeID = database.handoutDao.getMostRecentHandout()?.id ?: 0
                 if (tradeID > mostRecentTradeID){
                     sharedPreferences.edit().apply {
                         putLong("mostRecentTradeID", tradeID)
