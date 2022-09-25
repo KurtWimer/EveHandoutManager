@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -53,7 +54,6 @@ class AccountFragment : Fragment() {
                     requireNotNull(this.activity).startActivity(intent)
                 } catch (exception: ActivityNotFoundException) {
                     Log.e("CharacterManager", exception.message!!)
-                    //TODO warn user they need a web browser
                 }
                 accountViewModel.onLoginButtonComplete()
             }

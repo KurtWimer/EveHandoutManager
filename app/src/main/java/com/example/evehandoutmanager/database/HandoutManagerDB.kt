@@ -9,7 +9,7 @@ import com.example.evehandoutmanager.home.Handout
 
 @Dao
 interface AccountDao {
-    @Query("SELECT * FROM account") //TODO
+    @Query("SELECT * FROM account")
     fun getAccounts(): LiveData<List<Account>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

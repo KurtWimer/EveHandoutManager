@@ -35,7 +35,6 @@ interface ESIInterface {
 object Esi {
     private val client =  OkHttpClient.Builder()
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-        //TODO rate limit requests https://stackoverflow.com/questions/41309103/how-can-i-queue-up-and-delay-retrofit-requests-to-avoid-hitting-an-api-rate-limi
         .build()
 
     private val retrofit = Retrofit.Builder()

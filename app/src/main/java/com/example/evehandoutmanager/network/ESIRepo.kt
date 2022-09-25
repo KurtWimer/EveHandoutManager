@@ -35,7 +35,7 @@ object ESIRepo {
     fun generateChallenge() : Pair<String, String>{
         //generate 32 bytes
         //base 64url encode them
-        val random = Random(15)//TODO use a variable seed
+        val random = Random(Calendar.getInstance().timeInMillis)
         val byteArray = random.nextBytes(32)
         val verifier = String(Base64.getUrlEncoder().encode(byteArray)).replace("=", "")
 

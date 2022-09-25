@@ -21,7 +21,6 @@ class AccountAdapter(private val logoutListener: AccountLogoutListener) :ListAda
         fun bind(item: Account, clickListener: AccountLogoutListener){
             binding.account = item
             binding.logoutListener = clickListener
-            //TODO apply character icon
         }
 
         companion object {

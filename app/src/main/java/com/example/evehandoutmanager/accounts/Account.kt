@@ -20,7 +20,7 @@ data class Account constructor(
 suspend fun fetchInformation(characterID: String): Pair<String, String> {
     return withContext(Dispatchers.IO){
         val name  = Esi.retrofitInterface.getCharacter(characterID = characterID).await().name
-        val iconUrl = Esi.retrofitInterface.getPortrait(characterID = characterID).await().px512x512//TODO dynamically choose size of icon
+        val iconUrl = Esi.retrofitInterface.getPortrait(characterID = characterID).await().px512x512
         return@withContext Pair(name!!, iconUrl!!)
     }
 }
