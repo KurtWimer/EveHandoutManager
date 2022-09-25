@@ -3,7 +3,7 @@ package com.example.evehandoutmanager.home
 import com.google.gson.annotations.SerializedName
 
 class WalletEntry (
-    @SerializedName("amount"          ) var amount        : Int,
+    @SerializedName("amount"          ) var amount        : Double,
     @SerializedName("balance"         ) var balance       : Double? = null,
     @SerializedName("date"            ) var date          : String,
     @SerializedName("description"     ) var description   : String? = null,

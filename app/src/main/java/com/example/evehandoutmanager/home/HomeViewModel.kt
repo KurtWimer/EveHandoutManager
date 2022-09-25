@@ -21,6 +21,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.internal.toImmutableList
 import retrofit2.await
 import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
@@ -86,7 +87,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                     val fleetConfig = database.fleetDao.getConfig()
                     var shipName = "Unknown"
                     for (item in fleetConfig){
-                        if (item.iskValue == trade.amount) shipName = item.shipName
+                        if (item.iskValue.toDouble() == trade.amount) shipName = item.shipName
                     }
                     val receiverName = Esi.retrofitInterface.getCharacter(trade.firstPartyId.toString())
                         .await().name!!
@@ -134,12 +135,12 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                         //Get and filter all wallet transaction to find ship handouts
                         val journal = Esi.retrofitInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
                         val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID && convertDate(it.date).after(fleetStartTime) }
-                        val newHandouts = getNewHandouts(trades.filter { it.amount in 1..9999 })
+                        val newHandouts = getNewHandouts(trades.filter { it.amount.toInt() in 1..9999 })
                         //add all new handouts to DB
                         if (newHandouts.isNotEmpty()){
                             database.handoutDao.insert(*newHandouts.toTypedArray())
                         }
-                        processReturns(trades.filter { it.amount == 0 })
+                        processReturns(trades.filter { it.amount == 0.toDouble() })
                     }
                 }else{
                     Log.d("HomeViewModel", "No Accounts found $accounts")
@@ -149,7 +150,12 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
-    private fun convertDate(date: String): Date { return DateFormat.getDateInstance().parse(date)!! }
+    //Converts From iso-8601 into Date object
+    @SuppressLint("SimpleDateFormat")
+    private fun convertDate(date: String): Date {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        return format.parse(date)!!
+    }
 
     private fun isTokenExpired(accessToken : String): Boolean {
         return requireNotNull(JWT(accessToken).isExpired(0))
