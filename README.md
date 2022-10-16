@@ -2,9 +2,10 @@
 
 Eve Handout Manager is a Android application for keeping track of ship handouts in the videogame EVE Online
 
-![Account DarkMode](https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Accounts_DarkMode.jpg) ![Home DarkMode](https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Home_DarkMode.jpg) ![Fleet Setup DarkMode](https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Fleet_Setup_DarkMode.jpg)
 
-![Accounts LightMode](https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Accounts_LightMode.jpg) ![Home LightMode](https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Home_LightMode.jpg) ![Fleet Setup LightMode](https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/FleetSetup_LightMode.jpg)
+<img src="https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Accounts_DarkMode.jpg" alt="Account DarkMode" width="200" height="400"/> <img src="https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Home_DarkMode.jpg" alt="Home DarkMode" width="200" height="400"/>  <img src="https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Fleet_Setup_DarkMode.jpg" alt="Fleet Setup DarkMode" width="200" height="400"/>
+
+<img src="https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Accounts_LightMode.jpg" alt="Accounts LightMode" width="200" height="400"/>  <img src="https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/Home_LightMode.jpg" alt="Home LightMode" width="200" height="400"/>  <img src="https://github.com/KurtWimer/EveHandoutManager/blob/Fleet_Settup/README%20Images/FleetSetup_LightMode.jpg" alt="Fleet Setup LightMode" width="200" height="400"/>
 
 ## Installation
 
