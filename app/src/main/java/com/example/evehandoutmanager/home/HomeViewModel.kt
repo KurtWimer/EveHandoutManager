@@ -109,7 +109,8 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
                     }
                     val receiverName = Esi.retrofitInterface.getCharacter(trade.firstPartyId.toString())
                         .await().name!!
-                    newHandouts.add(Handout(trade.id, shipName, receiverName, trade.firstPartyId))
+                    val receiverIconUrl = Esi.retrofitInterface.getPortrait(characterID = trade.firstPartyId.toString()).await().px128x128!!
+                    newHandouts.add(Handout(trade.id, shipName, receiverName, trade.firstPartyId, receiverIconUrl))
                 }
                 return newHandouts.toImmutableList()
             }

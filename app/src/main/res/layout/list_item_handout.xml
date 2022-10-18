@@ -26,16 +26,17 @@
 
             <ImageView
                 android:id="@+id/shipImage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginStart="@dimen/padding_medium"
                 android:layout_marginTop="@dimen/padding_small"
                 android:layout_marginBottom="@dimen/padding_small"
-                android:contentDescription="@string/image_of_ship"
+                android:contentDescription="@string/eve_character_icon"
+                app:imageUrl="@{handout.receiverIconUrl}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_baseline_airplanemode_active_24" />
+                tools:srcCompat="@tools:sample/avatars"/>
 
             <TextView
                 android:id="@+id/shipName"
@@ -43,8 +44,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@{handout.shipName}"
-                app:layout_constraintBottom_toBottomOf="@+id/shipImage"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/shipImage"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="Wreckavak v2" />
 
             <TextView

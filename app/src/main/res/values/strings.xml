@@ -24,4 +24,5 @@
     <string name="start_fleet">Start New Fleet</string>
     <string name="stop_fleet">Stop Fleet</string>
     <string name="no_items">No Items Added Yet</string>
+    <string name="eve_character_icon">Eve Character Icon</string>
 </resources>
