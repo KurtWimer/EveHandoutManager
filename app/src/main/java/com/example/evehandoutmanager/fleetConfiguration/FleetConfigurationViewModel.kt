@@ -32,6 +32,10 @@ class FleetConfigurationViewModel(private val app: Application) : AndroidViewMod
     }
 
     fun onAddNewClick(item: FleetConfigItem){
+        if (item.shipName == ""){
+            Toast.makeText(app, "Cannot add ship without a name", Toast.LENGTH_LONG).show()
+            return
+        }
         viewModelScope.launch {
             val errorBoolean : Boolean = withContext(Dispatchers.IO) {
                 val currentConfig = database.fleetDao.getConfig()
@@ -46,5 +50,6 @@ class FleetConfigurationViewModel(private val app: Application) : AndroidViewMod
             }
             if (errorBoolean) Toast.makeText(app, "Cannot add ship with duplicate ISK value", Toast.LENGTH_LONG).show()
         }
+        newConfig = FleetConfigItem()
     }
 }
