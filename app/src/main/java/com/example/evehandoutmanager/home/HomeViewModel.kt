@@ -86,10 +86,15 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         val currentDate: Date = Calendar.getInstance().time
         if(lastWalletFetchTime!= null){
             val timeDiffInMinutes = getDateDiff(lastWalletFetchTime!!, currentDate, TimeUnit.MINUTES)
-            val timeUntilNextUpdate = 30 - timeDiffInMinutes
-            if(lastWalletFetchTime != null &&  timeDiffInMinutes < 30){
+            val timeUntilNextUpdate = 60 - timeDiffInMinutes
+            if(timeUntilNextUpdate > 0){
                 Toast.makeText(getApplication(), "Next update available in $timeUntilNextUpdate minutes", Toast.LENGTH_SHORT).show()
                 return
+            }
+            else{
+                val currentDateString = DateFormat.getDateTimeInstance().format(currentDate)
+                sharedPreferences.edit().putString("walletFetchTime", currentDateString).commit()
+                lastWalletFetchTime = currentDate
             }
         }
         else{
