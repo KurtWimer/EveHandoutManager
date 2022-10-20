@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:enabled="@{viewModel.fleetStarted ? true : false }"
-            android:onClick="@{() -> viewModel.processNewTrades()}"
+            android:onClick="@{() -> viewModel.onFetchTradesButtonClick()}"
             android:text="@string/fetch_trades"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
