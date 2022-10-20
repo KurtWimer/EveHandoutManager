@@ -67,9 +67,11 @@ suspend fun processNewTrades(database: LocalDatabase, account : Account, fleetSt
     return withContext(Dispatchers.IO) {
         //Get and filter all wallet transaction to find ship handouts
         val journal = Esi.retrofitInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
+        val keys = database.fleetDao.getKeys().toMutableList()
+        keys.add(0)
         val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID && convertDate(it.date).after(fleetStartTime) }
         val newHandouts = getNewHandouts(
-            trades = trades.filter { it.amount.toInt() in 1..9999 },
+            trades = trades.filter { it.amount.toInt() in keys},
             database = database
         )
         //add all new handouts to DB
