@@ -26,28 +26,36 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     val handoutList : LiveData<List<Handout>>
         get() = _handoutList
     private val clientID = app.getString(R.string.client_id)
-    //TODO refactor load and save shared preferences based on activity lifecycle
-    private var fleetStartTime : Date? = sharedPreferences.getString("startTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
-    private var lastWalletFetchTime : Date? = sharedPreferences.getString("walletFetchTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
-    private var mostRecentTradeID = 0L //TODO figure out how to handle most recent trade ID
-    //End TODO
-    var fleetStarted : MutableLiveData<Boolean> = MutableLiveData<Boolean>(fleetStartTime != null)
+    var fleetStarted : MutableLiveData<Boolean> = MutableLiveData<Boolean>(false)
 
+    init {
+        fleetStarted.value = (sharedPreferences.getString("startTime", null) != null)
+    }
+
+    @SuppressLint("ApplySharedPref")
     fun onFetchTradesButtonClick(){
         val account = accounts?.first() //TODO modify application to only allow one active account
+        val fleetStartTime : Date? = sharedPreferences.getString("startTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
+        val lastFetch : Date? = sharedPreferences.getString("walletFetchTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
+        val tradeID : Long = sharedPreferences.getLong("tradeID", 0L)
+        val updateAvailable = walletUpdateAvailable(lastFetch, app = getApplication())
         if (account != null &&
             fleetStartTime != null &&
-            (walletUpdateAvailable(sharedPreferences, app = getApplication()))
+            updateAvailable
         ){
             viewModelScope.launch {
                 account.refreshAccountToken(clientID, database)
-                //TODO do something with returned trade ID
-                processNewTrades(
+                val newTradeID = processNewTrades(
                     database = database,
                     account = account,
-                    fleetStartTime = fleetStartTime!!,
-                    mostRecentTradeID = mostRecentTradeID
+                    fleetStartTime = fleetStartTime,
+                    mostRecentTradeID = tradeID
                 )
+                val preferenceEditor = sharedPreferences.edit()
+                val currentDateString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
+                preferenceEditor.putString("walletFetchTime", currentDateString)
+                preferenceEditor.putLong("tradeID", newTradeID)
+                preferenceEditor.commit()
             }
         }
     }
@@ -70,13 +78,13 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     @SuppressLint("ApplySharedPref")
     fun onStartToggleButtonClick() {
+        val fleetStartTime : Date? = sharedPreferences.getString("startTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
         if (accounts?.isEmpty() == true){
             Toast.makeText(getApplication(), "Please sign in before starting a fleet", Toast.LENGTH_SHORT).show()
             return
         }
 
         if (fleetStartTime != null){ //Stop fleet
-            fleetStartTime = null
             sharedPreferences.edit().putString("startTime", null).commit()
             fleetStarted.value = false
         } else {
@@ -88,7 +96,6 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
             val currentDate: Date = Calendar.getInstance().time
             val currentDateString = DateFormat.getDateTimeInstance().format(currentDate)
             sharedPreferences.edit().putString("startTime", currentDateString).commit()
-            fleetStartTime = currentDate
             fleetStarted.value = true
         }
     }

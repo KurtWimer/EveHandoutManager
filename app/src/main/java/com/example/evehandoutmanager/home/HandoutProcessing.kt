@@ -12,11 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.internal.toImmutableList
 import retrofit2.await
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+//Converts WalletEntries into Handout objects
 suspend fun getNewHandouts(trades : List<WalletEntry>, database : LocalDatabase): List<Handout> {
     val newHandouts = mutableListOf<Handout>()
     for (trade in trades){
@@ -48,24 +48,22 @@ suspend fun processReturns(trades: List<WalletEntry>, database : LocalDatabase){
 
 //Check if update to wallet transactions is available
 //If it is available resets the timer for next update
-fun walletUpdateAvailable(sharedPreferences: SharedPreferences, app: Application) : Boolean {
+fun walletUpdateAvailable(lastFetch : Date?, app: Application) : Boolean {
+    if (lastFetch == null) return true
     //ESI only allows wallet updates every 60 minutes
     val CACHE_DURATION = 60
     val currentDate: Date = Calendar.getInstance().time
-    val lastWalletFetchTime : Date? = sharedPreferences.getString("walletFetchTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
-    if(lastWalletFetchTime!= null){
-        val timeDiffInMinutes = getDateDiff(lastWalletFetchTime!!, currentDate, TimeUnit.MINUTES)
-        val timeUntilNextUpdate = CACHE_DURATION - timeDiffInMinutes
-        if(timeUntilNextUpdate > 0){
-            Toast.makeText(app.applicationContext, "Next update available in $timeUntilNextUpdate minutes", Toast.LENGTH_SHORT).show()
-            return false
-        }
+    val timeDiffInMinutes = getDateDiff(lastFetch, currentDate, TimeUnit.MINUTES)
+    val timeUntilNextUpdate = CACHE_DURATION - timeDiffInMinutes
+    if(timeUntilNextUpdate > 0){
+        Toast.makeText(app.applicationContext, "Next update available in $timeUntilNextUpdate minutes", Toast.LENGTH_SHORT).show()
+        return false
     }
-    val currentDateString = DateFormat.getDateTimeInstance().format(currentDate)
-    sharedPreferences.edit().putString("walletFetchTime", currentDateString).commit()
     return true
 }
 
+//Finds and Processes all character trades
+//Returns the ID of the most recent trade processed
 suspend fun processNewTrades(database: LocalDatabase, account : Account, fleetStartTime: Date, mostRecentTradeID: Long) : Long {
     return withContext(Dispatchers.IO) {
         //Get and filter all wallet transaction to find ship handouts
