@@ -17,7 +17,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 //Converts WalletEntries into Handout objects
-suspend fun getNewHandouts(trades : List<WalletEntry>, database : LocalDatabase): List<Handout> {
+private suspend fun getNewHandouts(trades : List<WalletEntry>, database : LocalDatabase): List<Handout> {
     val newHandouts = mutableListOf<Handout>()
     for (trade in trades){
         val fleetConfig = database.fleetDao.getConfig()
@@ -25,8 +25,7 @@ suspend fun getNewHandouts(trades : List<WalletEntry>, database : LocalDatabase)
         for (item in fleetConfig){
             if (item.iskValue.toDouble() == trade.amount) shipName = item.shipName
         }
-        val receiverName = Esi.retrofitInterface.getCharacter(trade.firstPartyId.toString())
-            .await().name!!
+        val receiverName = Esi.retrofitInterface.getCharacter(trade.firstPartyId.toString()).await().name!!
         val receiverIconUrl = Esi.retrofitInterface.getPortrait(characterID = trade.firstPartyId.toString()).await().px128x128!!
         newHandouts.add(Handout(trade.id, shipName, receiverName, trade.firstPartyId, receiverIconUrl))
     }
@@ -36,7 +35,7 @@ suspend fun getNewHandouts(trades : List<WalletEntry>, database : LocalDatabase)
 //Removes ship returns
 //Assumes each character only gets one Handout, if the character gets multiple it will
 //return the ships in the order they were handed out
-suspend fun processReturns(trades: List<WalletEntry>, database : LocalDatabase){
+private fun processReturns(trades: List<WalletEntry>, database : LocalDatabase){
     for (trade in trades){
         val potentialMatches = database.handoutDao.getPlayersHandouts(trade.firstPartyId)
         when (potentialMatches.size){
