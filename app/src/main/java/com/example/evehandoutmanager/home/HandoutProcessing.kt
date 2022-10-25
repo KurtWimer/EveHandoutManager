@@ -2,11 +2,13 @@ package com.example.evehandoutmanager.home
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.SharedPreferences
 import android.util.Log
 import android.widget.Toast
 import com.example.evehandoutmanager.accounts.Account
+import com.example.evehandoutmanager.database.FleetDao
+import com.example.evehandoutmanager.database.HandoutDao
 import com.example.evehandoutmanager.database.LocalDatabase
+import com.example.evehandoutmanager.network.ESIInterface
 import com.example.evehandoutmanager.network.Esi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -17,17 +19,17 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 //Converts WalletEntries into Handout objects
-private suspend fun getNewHandouts(trades : List<WalletEntry>, database : LocalDatabase): List<Handout> {
+private suspend fun getNewHandouts(trades : List<WalletEntry>, dao: FleetDao, EsiInterface : ESIInterface = Esi.retrofitInterface): List<Handout> {
     val newHandouts = mutableListOf<Handout>()
     for (trade in trades){
-        val fleetConfig = database.fleetDao.getConfig()
+        val fleetConfig = dao.getConfig()
         var shipName = "Unknown"
         for (item in fleetConfig){
             if (item.iskValue.toDouble() == trade.amount) shipName = item.shipName
         }
-        val receiverName = Esi.retrofitInterface.getCharacter(trade.firstPartyId.toString()).await().name!!
-        val receiverIconUrl = Esi.retrofitInterface.getPortrait(characterID = trade.firstPartyId.toString()).await().px128x128!!
-        newHandouts.add(Handout(trade.id, shipName, receiverName, trade.firstPartyId, receiverIconUrl))
+        val receiverName = EsiInterface.getCharacter(trade.firstPartyId.toString()).await().name
+        val receiverIconUrl = EsiInterface.getPortrait(characterID = trade.firstPartyId.toString()).await().px128x128
+        newHandouts.add(Handout(trade.id, shipName, receiverName!!, trade.firstPartyId, receiverIconUrl!!))
     }
     return newHandouts.toImmutableList()
 }
@@ -35,12 +37,12 @@ private suspend fun getNewHandouts(trades : List<WalletEntry>, database : LocalD
 //Removes ship returns
 //Assumes each character only gets one Handout, if the character gets multiple it will
 //return the ships in the order they were handed out
-private fun processReturns(trades: List<WalletEntry>, database : LocalDatabase){
+private fun processReturns(trades: List<WalletEntry>, dao: HandoutDao){
     for (trade in trades){
-        val potentialMatches = database.handoutDao.getPlayersHandouts(trade.firstPartyId)
+        val potentialMatches = dao.getPlayersHandouts(trade.firstPartyId)
         when (potentialMatches.size){
             0 -> Log.d("HomeViewModel", "Unable to find matching trade: $trade")
-            else -> database.handoutDao.delete(potentialMatches.first())
+            else -> dao.delete(potentialMatches.first())
         }
     }
 }
@@ -52,7 +54,7 @@ fun walletUpdateAvailable(lastFetch : Date?, app: Application) : Boolean {
     //ESI only allows wallet updates every 60 minutes
     val CACHE_DURATION = 60
     val currentDate: Date = Calendar.getInstance().time
-    val timeDiffInMinutes = getDateDiff(lastFetch, currentDate, TimeUnit.MINUTES)
+    val timeDiffInMinutes = getDateDiff(lastFetch, currentDate)
     val timeUntilNextUpdate = CACHE_DURATION - timeDiffInMinutes
     if(timeUntilNextUpdate > 0){
         Toast.makeText(app.applicationContext, "Next update available in $timeUntilNextUpdate minutes", Toast.LENGTH_SHORT).show()
@@ -63,16 +65,19 @@ fun walletUpdateAvailable(lastFetch : Date?, app: Application) : Boolean {
 
 //Finds and Processes all character trades
 //Returns the ID of the most recent trade processed
-suspend fun processNewTrades(database: LocalDatabase, account : Account, fleetStartTime: Date, mostRecentTradeID: Long) : Long {
+suspend fun processNewTrades(database: LocalDatabase, account : Account, fleetStartTime: Date, mostRecentTradeID: Long, esiInterface : ESIInterface = Esi.retrofitInterface) : Long {
     return withContext(Dispatchers.IO) {
         //Get and filter all wallet transaction to find ship handouts
-        val journal = Esi.retrofitInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
+        val journal = esiInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
         val keys = database.fleetDao.getKeys().toMutableList()
-        keys.add(0)
-        val trades = journal.filter { it.refType == "player_trading" && it.id > mostRecentTradeID && convertDate(it.date).after(fleetStartTime) }
+        val trades = journal.filter {
+                    it.refType == "player_trading" &&
+                    it.id > mostRecentTradeID &&
+                    !convertDate(it.date).before(fleetStartTime)}
         val newHandouts = getNewHandouts(
             trades = trades.filter { it.amount.toInt() in keys},
-            database = database
+            dao = database.fleetDao,
+            EsiInterface = esiInterface
         )
         //add all new handouts to DB
         if (newHandouts.isNotEmpty()){
@@ -80,14 +85,15 @@ suspend fun processNewTrades(database: LocalDatabase, account : Account, fleetSt
         }
         processReturns(
             trades = trades.filter { it.amount == 0.toDouble() },
-            database = database
+            dao = database.handoutDao
         )
+        //Return value relies on the fact that ESI returns in order from most recent to oldest and trade ID only increases
         return@withContext journal.first().id
     }
 }
 
 //shamelessly stolen from https://stackoverflow.com/questions/1555262/calculating-the-difference-between-two-java-date-instances
-private fun getDateDiff(date1: Date, date2: Date, timeUnit: TimeUnit): Long {
+private fun getDateDiff(date1: Date, date2: Date, timeUnit: TimeUnit = TimeUnit.MINUTES): Long {
     val diffInMillies = date2.time - date1.time
     return timeUnit.convert(diffInMillies, TimeUnit.MILLISECONDS)
 }

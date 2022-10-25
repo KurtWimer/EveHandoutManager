@@ -30,3 +30,4 @@ fun <T> LiveData<T>.blockingObserve(): T? {
     latch.await(2, TimeUnit.SECONDS)
     return value
 }
+
