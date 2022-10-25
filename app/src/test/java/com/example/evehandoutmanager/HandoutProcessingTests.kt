@@ -11,8 +11,12 @@ import com.example.evehandoutmanager.network.ESIInterface
 import com.example.evehandoutmanager.network.Portrait
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import org.hamcrest.CoreMatchers.equalTo
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentCaptor
+import org.mockito.Captor
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
@@ -37,6 +41,8 @@ class HandoutProcessingTests {
         AccessToken = "accessToken",
         RefreshToken = "refreshToken"
     )
+    @Captor
+    private lateinit var handoutCaptor: ArgumentCaptor<Handout>
 
     @Before
     fun initMocks(){
@@ -122,7 +128,7 @@ class HandoutProcessingTests {
         processNewTrades(
             database = db,
             account = account,
-            fleetStartTime = Date(),
+            fleetStartTime = Date(0L),
             mostRecentTradeID = 0,
             esiInterface = esi
         )
@@ -130,5 +136,49 @@ class HandoutProcessingTests {
         verify(handoutDao, never()).delete(any(Handout::class.java))
     }
 
+    @Test
+    fun processMultipleHandoutsAndReturns() = runTest {
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+            .thenReturn(Calls.response(sampleLoans + sampleReturns))
+        //Must mock Call object multiple times to prevent error from already returning response
+        `when`(esi.getCharacter(anyString(), anyString()))
+            .thenReturn(Calls.response(CharacterResponse(name = "test")))
+            .thenReturn(Calls.response(CharacterResponse(name = "test")))
+            .thenReturn(Calls.response(CharacterResponse(name = "test")))
+            .thenReturn(Calls.response(CharacterResponse(name = "test")))
+        `when`(esi.getPortrait(anyString(), anyString())).thenReturn(Calls.response(Portrait(px128x128 = "test")))
+            .thenReturn(Calls.response(Portrait(px128x128 = "test")))
+            .thenReturn(Calls.response(Portrait(px128x128 = "test")))
+            .thenReturn(Calls.response(Portrait(px128x128 = "test")))
+            .thenReturn(Calls.response(Portrait(px128x128 = "test")))
 
+        processNewTrades(
+            database = db,
+            account = account,
+            fleetStartTime = Date(0L),
+            mostRecentTradeID = 0,
+            esiInterface = esi
+        )
+
+        verify(handoutDao, times(1)).insert(capture(handoutCaptor))
+        //5th sample handout has invalid key so only 4 loans should be seen
+        assertThat(handoutCaptor.allValues.size, equalTo(4))
+        //Since dao is mocked it is possible to delete more than were inserted
+        verify(handoutDao, times(5)).delete(any(Handout::class.java))
+    }
+
+    @Test
+    fun returnValueIsCorrect() = runTest{
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+            .thenReturn(Calls.response(sampleReturns))
+
+        val returnVal = processNewTrades(
+            database = db,
+            account = account,
+            fleetStartTime = Date(0L),
+            mostRecentTradeID = 0,
+            esiInterface = esi
+        )
+        assertThat(returnVal, equalTo(sampleReturns.first().id))
+    }
 }

@@ -2,10 +2,12 @@ package com.example.evehandoutmanager
 
 import com.example.evehandoutmanager.home.Handout
 import com.example.evehandoutmanager.home.WalletEntry
+import org.mockito.ArgumentCaptor
 import org.mockito.Mockito
 
 //Needed to use mockito matcher with Kotlin types
 fun <T> any(type: Class<T>): T = Mockito.any<T>(type)
+fun <T> capture(argumentCaptor: ArgumentCaptor<T>): T = argumentCaptor.capture()
 
 fun createHandout(handoutID: Long, receiverID: Int): Handout {
     return Handout (
