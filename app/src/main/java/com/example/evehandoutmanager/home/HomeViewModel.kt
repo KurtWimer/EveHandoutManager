@@ -21,7 +21,7 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
     private val sharedPreferences = app.getSharedPreferences("EHMPreferences", Context.MODE_PRIVATE)
     private val database = getDatabase(app)
     val accountList = database.accountDao.getAccounts()
-    private var accounts : List<Account>? = null //TODO refactor into single account
+    private var accounts : List<Account>? = null
     private val _handoutList = database.handoutDao.getHandouts()
     val handoutList : LiveData<List<Handout>>
         get() = _handoutList
@@ -34,29 +34,27 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     @SuppressLint("ApplySharedPref")
     fun onFetchTradesButtonClick(){
-        val account = accounts?.first() //TODO modify application to only allow one active account
         val fleetStartTime : Date? = sharedPreferences.getString("startTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
         val lastFetch : Date? = sharedPreferences.getString("walletFetchTime", null)?.let { DateFormat.getDateTimeInstance().parse(it) ?: null}
-        val tradeID : Long = sharedPreferences.getLong("tradeID", 0L)
         val updateAvailable = walletUpdateAvailable(lastFetch, app = getApplication())
-        if (account != null &&
-            fleetStartTime != null &&
-            updateAvailable
+        if (fleetStartTime != null &&
+            updateAvailable &&
+            accounts != null
         ){
-            viewModelScope.launch {
-                account.refreshAccountToken(clientID, database)
-                val newTradeID = processNewTrades(
-                    database = database,
-                    account = account,
-                    fleetStartTime = fleetStartTime,
-                    mostRecentTradeID = tradeID
-                )
-                val preferenceEditor = sharedPreferences.edit()
-                val currentDateString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
-                preferenceEditor.putString("walletFetchTime", currentDateString)
-                preferenceEditor.putLong("tradeID", newTradeID)
-                preferenceEditor.commit()
+            for (account in accounts!!){
+                viewModelScope.launch {
+                    account.refreshAccountToken(clientID, database.accountDao)
+                    val newTradeID = processNewTrades(
+                        database = database,
+                        account = account,
+                        fleetStartTime = fleetStartTime,
+                        mostRecentTradeID = account.tradeID
+                    )
+                    account.updateTradeID(newTradeID, database.accountDao)
+                }
             }
+            val currentDateString = DateFormat.getDateTimeInstance().format(Calendar.getInstance().time)
+            sharedPreferences.edit().putString("walletFetchTime", currentDateString).commit()
         }
     }
 

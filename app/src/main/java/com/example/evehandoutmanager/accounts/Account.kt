@@ -3,7 +3,7 @@ package com.example.evehandoutmanager.accounts
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.auth0.android.jwt.JWT
-import com.example.evehandoutmanager.database.LocalDatabase
+import com.example.evehandoutmanager.database.AccountDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.example.evehandoutmanager.network.Esi
@@ -17,18 +17,29 @@ data class Account constructor(
     val iconURL: String,
     val characterID: Int,
     var AccessToken: String,
-    var RefreshToken: String){
+    private var _RefreshToken: String,
+    private var _tradeID: Long? = null){
+    val tradeID: Long
+        get() = _tradeID?: 0L
 
-    suspend fun refreshAccountToken(clientID: String, database: LocalDatabase){
+    suspend fun refreshAccountToken(clientID: String, dao: AccountDao){
         if (isTokenExpired(AccessToken)) { //Refresh Access Token Before Proceeding
             val self = this
             withContext(Dispatchers.IO) {
                 val newToken =
-                    Sso.retrofitInterface.refreshAccessToken(RefreshToken, clientID).await()
+                    Sso.retrofitInterface.refreshAccessToken(_RefreshToken, clientID).await()
                 AccessToken = newToken.accessToken
-                RefreshToken = newToken.refreshToken
-                database.accountDao.update(self)
+                _RefreshToken = newToken.refreshToken
+                dao.update(self)
             }
+        }
+    }
+
+    suspend fun updateTradeID(newID: Long, dao: AccountDao){
+        val self = this
+        _tradeID = newID
+        withContext(Dispatchers.IO){
+            dao.update(self)
         }
     }
 
