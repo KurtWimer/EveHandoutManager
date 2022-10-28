@@ -16,20 +16,22 @@ data class Account constructor(
     val name : String,
     val iconURL: String,
     val characterID: Int,
-    var AccessToken: String,
-    private var _RefreshToken: String,
+    var accessToken: String,
+    private var _refreshToken: String,
     private var _tradeID: Long? = null){
+    val refreshToken: String
+        get() = _refreshToken
     val tradeID: Long
         get() = _tradeID?: 0L
 
     suspend fun refreshAccountToken(clientID: String, dao: AccountDao){
-        if (isTokenExpired(AccessToken)) { //Refresh Access Token Before Proceeding
+        if (isTokenExpired(accessToken)) { //Refresh Access Token Before Proceeding
             val self = this
             withContext(Dispatchers.IO) {
                 val newToken =
-                    Sso.retrofitInterface.refreshAccessToken(_RefreshToken, clientID).await()
-                AccessToken = newToken.accessToken
-                _RefreshToken = newToken.refreshToken
+                    Sso.retrofitInterface.refreshAccessToken(_refreshToken, clientID).await()
+                accessToken = newToken.accessToken
+                _refreshToken = newToken.refreshToken
                 dao.update(self)
             }
         }

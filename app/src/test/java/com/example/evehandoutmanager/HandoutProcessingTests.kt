@@ -34,12 +34,12 @@ class HandoutProcessingTests {
     lateinit var db : LocalDatabase
     @Mock
     lateinit var esi : ESIInterface
-    val account = Account(
+    private val account = Account(
         name = "TestAccount",
         iconURL = "www.test.com",
         characterID = 1,
-        AccessToken = "accessToken",
-        RefreshToken = "refreshToken"
+        accessToken = "accessToken",
+        _refreshToken =  "refreshToken"
     )
     @Captor
     private lateinit var handoutCaptor: ArgumentCaptor<Handout>
@@ -57,7 +57,7 @@ class HandoutProcessingTests {
 
     @Test
     fun addSingleHandout() = runTest{
-        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.accessToken))
             .thenReturn(Calls.response(sampleLoans.subList(0,1)))
 
         processNewTrades(
@@ -74,7 +74,7 @@ class HandoutProcessingTests {
 
     @Test
     fun removeSingleHandout() = runTest{
-        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.accessToken))
             .thenReturn(Calls.response(sampleReturns.subList(0,1)))
 
         processNewTrades(
@@ -90,7 +90,7 @@ class HandoutProcessingTests {
 
     @Test
     fun addAndRemoveSingleHandout() = runTest{
-        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.accessToken))
             .thenReturn(Calls.response(sampleReturns.subList(0,1) + sampleLoans.subList(0,1)))
 
         processNewTrades(
@@ -106,7 +106,7 @@ class HandoutProcessingTests {
 
     @Test
     fun processOldData() = runTest{
-        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.accessToken))
             .thenReturn(Calls.response(sampleReturns.subList(0,1) + sampleLoans.subList(0,1)))
 
         processNewTrades(
@@ -122,7 +122,7 @@ class HandoutProcessingTests {
 
     @Test
     fun processTradesWithInvalidKey() = runTest{
-        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.accessToken))
             .thenReturn(Calls.response(sampleLoans.subList(4,5)))
 
         processNewTrades(
@@ -138,7 +138,7 @@ class HandoutProcessingTests {
 
     @Test
     fun processMultipleHandoutsAndReturns() = runTest {
-        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.accessToken))
             .thenReturn(Calls.response(sampleLoans + sampleReturns))
         //Must mock Call object multiple times to prevent error from already returning response
         `when`(esi.getCharacter(anyString(), anyString()))
@@ -169,7 +169,7 @@ class HandoutProcessingTests {
 
     @Test
     fun returnValueIsCorrect() = runTest{
-        `when`(esi.getWalletJournal(account.characterID.toString(), account.AccessToken))
+        `when`(esi.getWalletJournal(account.characterID.toString(), account.accessToken))
             .thenReturn(Calls.response(sampleReturns))
 
         val returnVal = processNewTrades(

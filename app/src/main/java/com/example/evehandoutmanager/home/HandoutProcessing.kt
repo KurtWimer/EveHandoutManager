@@ -68,7 +68,7 @@ fun walletUpdateAvailable(lastFetch : Date?, app: Application) : Boolean {
 suspend fun processNewTrades(database: LocalDatabase, account : Account, fleetStartTime: Date, mostRecentTradeID: Long, esiInterface : ESIInterface = Esi.retrofitInterface) : Long {
     return withContext(Dispatchers.IO) {
         //Get and filter all wallet transaction to find ship handouts
-        val journal = esiInterface.getWalletJournal(account.characterID.toString(), account.AccessToken).await()
+        val journal = esiInterface.getWalletJournal(account.characterID.toString(), account.accessToken).await()
         val keys = database.fleetDao.getKeys().toMutableList()
         val trades = journal.filter {
                     it.refType == "player_trading" &&
