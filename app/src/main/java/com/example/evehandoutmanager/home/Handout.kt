@@ -9,4 +9,5 @@ data class Handout (
     val id : Long,
     val shipName : String,
     val receiverName: String,
-    val receiverID: Int)
+    val receiverID: Int,
+    val receiverIconUrl: String)

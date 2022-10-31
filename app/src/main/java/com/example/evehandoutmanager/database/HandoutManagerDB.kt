@@ -45,11 +45,14 @@ interface HandoutDao {
 
 @Dao
 interface FleetDao {
-    @Query("Select * FROM FleetConfigItem")
+    @Query("SELECT * FROM FleetConfigItem")
     fun getConfigLive() : LiveData<List<FleetConfigItem>>
 
-    @Query("Select * FROM FleetConfigItem")
+    @Query("SELECT * FROM FleetConfigItem")
     fun getConfig() : List<FleetConfigItem>
+
+    @Query("SELECT iskValue FROM FleetConfigItem")
+    fun getKeys() : List<Int>
 
     @Insert
     fun insert(vararg configs: FleetConfigItem)
@@ -61,7 +64,7 @@ interface FleetDao {
     fun deleteAll()
 }
 
-@Database(entities = [Account::class, Handout::class, FleetConfigItem::class], version = 1)
+@Database(entities = [Account::class, Handout::class, FleetConfigItem::class], version = 4)
 abstract class LocalDatabase : RoomDatabase() {
     abstract val accountDao : AccountDao
     abstract val handoutDao : HandoutDao

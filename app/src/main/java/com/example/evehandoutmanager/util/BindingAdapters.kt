@@ -1,4 +1,4 @@
-package com.example.evehandoutmanager.Util
+package com.example.evehandoutmanager.util
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
